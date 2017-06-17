@@ -1,0 +1,39 @@
+@import "../../themes/vars.less";
+.listViewFooter{
+
+}
+.listView{
+  :global{
+    .am-list-body {
+      border-top: none;
+      clear: both;
+      overflow: hidden;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .am-list-footer {
+      text-align: center;
+      height: 128px;
+      line-height: 128px;
+      padding: 0;
+    }
+
+    .am-list-header {
+      width: 100%;
+      height: 100px;
+      line-height: 100px;
+      font-size: 34px;
+      color: #333;
+      text-align: center;
+      position: relative;
+      padding: 0;
+
+      &:empty {
+        display: none;
+      }
+    }
+  }
+}
