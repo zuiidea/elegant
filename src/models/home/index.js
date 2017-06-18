@@ -9,6 +9,7 @@ export default modelExtend(model, {
 
   state: {
     list: [],
+    refreshing: false,
     pagination: {
       offset: 0,
       total: 0,
@@ -40,7 +41,7 @@ export default modelExtend(model, {
         const { list } = yield select(item => item.home)
         const { total } = data
         const newData = (offset === 0 ? [] : list).concat(data.list)
-        
+
         yield put({ type: 'updateState',
           payload: {
             list: newData,

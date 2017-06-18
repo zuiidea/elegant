@@ -42,6 +42,7 @@
     "koa-views": "^6.0.2",
     "less-vars-to-js": "^1.1.2",
     "lodash": "^4.17.4",
+    "material-ui": "^0.18.3",
     "mockjs": "^1.0.1-beta3",
     "path-to-regexp": "^1.7.0",
     "postcss-pxtorem": "^4.0.0",

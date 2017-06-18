@@ -1,8 +1,13 @@
+// import { Tabs } from 'antd-mobile'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import {Tabs, Tab} from 'material-ui/Tabs'
 import React from 'react'
 import { connect } from 'dva'
 import styles from './index.less'
 import { ListView } from 'components'
 import { listViewProps } from 'utils'
+
+// const { TabPane } = Tabs
 
 const Home = ({ loading, dispatch, location, home }) => {
   const { list, pagination } = home
@@ -45,9 +50,19 @@ const Home = ({ loading, dispatch, location, home }) => {
   })
 
   return (
-    <div className={styles.home}>
-      <ListView {...listProps} />
-    </div>
+    <MuiThemeProvider>
+      <div className={styles.home}>
+      <Tabs>
+        {
+          Array.from({length:3}).map((item,key) => (
+            <Tab label={`选项${key}`} key={key}>
+              <ListView {...listProps} />
+            </Tab>
+          ))
+        }
+      </Tabs>
+      </div>
+    </MuiThemeProvider>
   )
 }
 
