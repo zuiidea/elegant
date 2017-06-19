@@ -5,25 +5,14 @@ import FlatButton from 'material-ui/FlatButton'
 import Swiper from 'react-swipeable-views'
 import styles from './index.less'
 import { ListView } from 'components'
-import { listViewProps } from 'utils'
+import listViewProps from './listViewProps'
 import classnames from 'classnames'
-
-
-const Body = (props) => {
-  console.log(props)
-  return (
-    <div className={classnames({'am-list-body':true,[styles.listBody]: true})}>
-      {props.children}
-    </div>
-  )
-}
-
-
 
 const Home = ({ loading, dispatch, location, home }) => {
   const { list, pagination, index } = home
   const { limit, offset, total } = pagination
   const { query } = location
+  console.log(offset,limit)
 
   const renderRow = (item, sectionID, index) => {
     return (
@@ -48,14 +37,8 @@ const Home = ({ loading, dispatch, location, home }) => {
     loading: loading.models['home/query'],
     emptyContent: '暂无',
     renderRow,
-    // renderBodyComponent:() => <Body />,
-    scrollerOptions:{
-      onScroll(){
-        console.log("scroll66")
-      }
-    },
     onScroll() {
-      console.log("scroll")
+      console.log(offset,limit)
       dispatch({
         type: 'home/query',
         payload: {
