@@ -10,7 +10,8 @@ const List = ({ loading, dataSource, emptyContent, ...otherProps }) => {
         dataSource={new ListView.DataSource({
           rowHasChanged: (row1, row2) => row1 !== row2,
         }).cloneWithRows(dataSource)}
-        useBodyScroll
+        // useBodyScroll
+        useZscroller
         scrollRenderAheadDistance={500}
         scrollEventThrottle={20}
         onEndReachedThreshold={10}

@@ -6,8 +6,19 @@ import Swiper from 'react-swipeable-views'
 import styles from './index.less'
 import { ListView } from 'components'
 import { listViewProps } from 'utils'
+import classnames from 'classnames'
 
-// const { TabPane } = Tabs
+
+const Body = (props) => {
+  console.log(props)
+  return (
+    <div className={classnames({'am-list-body':true,[styles.listBody]: true})}>
+      {props.children}
+    </div>
+  )
+}
+
+
 
 const Home = ({ loading, dispatch, location, home }) => {
   const { list, pagination, index } = home
@@ -37,7 +48,14 @@ const Home = ({ loading, dispatch, location, home }) => {
     loading: loading.models['home/query'],
     emptyContent: '暂无',
     renderRow,
+    // renderBodyComponent:() => <Body />,
+    scrollerOptions:{
+      onScroll(){
+        console.log("scroll66")
+      }
+    },
     onScroll() {
+      console.log("scroll")
       dispatch({
         type: 'home/query',
         payload: {
@@ -63,7 +81,7 @@ const Home = ({ loading, dispatch, location, home }) => {
     <MuiThemeProvider>
       <div className={styles.home}>
       <div className={styles.menu}>
-        <Swiper index={index} onChangeIndex={handleChangeIndex} >
+        <Swiper index={index} onChangeIndex={handleChangeIndex}>
           {
             Array.from({length:3}).map((item,key) => (
               <FlatButton key={key} label={"按钮"+key} />
@@ -72,12 +90,7 @@ const Home = ({ loading, dispatch, location, home }) => {
         </Swiper>
       </div>
       <div className={styles.content}>
-        <Swiper index={index} onChangeIndex={handleChangeIndex}
-          containerStyle={{
-            height: '100%',
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
+        <Swiper index={index} onChangeIndex={handleChangeIndex}  className={styles.slideContainer}>
             {
               Array.from({length:3}).map((item,key) => (
                 <div label={`选项${key}`} key={key} className={styles.slide}>

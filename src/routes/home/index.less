@@ -1,5 +1,7 @@
 @import "../../themes/vars.less";
 
+@containerHeight:~"calc(100vh - 72px)";
+
 .home {
   background: #fff;
   width: 100%;
@@ -17,7 +19,8 @@
 }
 .content{
   position: absolute;
-  padding: 32px 32px 0 32px;
+  background: #fff;
+  // padding: 32px 32px 0 32px;
   top: 72px;
   left: 0;
   right:0;
@@ -58,10 +61,19 @@
   }
 }
 
-.slideContainer{
-  height: 100%;
-  -webkit-overflow-scrolling: touch;
+.listBody{
+  // height:~"calc(100vh - 108px)";
 }
-.slide{
-  min-height: 100%;
+.slideContainer{
+  .slide{
+    // min-height: @containerHeight;
+    padding: 32px 32px 0 32px;
+    background: #fff;
+  }
+  :global{
+    .react-swipeable-view-container{
+      // height:@containerHeight;
+      // -webkit-overflow-scrolling: touch;
+    }
+  }
 }
