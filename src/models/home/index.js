@@ -9,12 +9,12 @@ export default modelExtend(model, {
 
   state: {
     list: [],
-    refreshing: false,
     pagination: {
       offset: 0,
       total: 0,
       limit: 10,
     },
+    index: 0,
   },
 
   subscriptions: {

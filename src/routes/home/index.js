@@ -1,8 +1,8 @@
-// import { Tabs } from 'antd-mobile'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import {Tabs, Tab} from 'material-ui/Tabs'
 import React from 'react'
 import { connect } from 'dva'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import FlatButton from 'material-ui/FlatButton'
+import Swiper from 'react-swipeable-views'
 import styles from './index.less'
 import { ListView } from 'components'
 import { listViewProps } from 'utils'
@@ -10,7 +10,7 @@ import { listViewProps } from 'utils'
 // const { TabPane } = Tabs
 
 const Home = ({ loading, dispatch, location, home }) => {
-  const { list, pagination } = home
+  const { list, pagination, index } = home
   const { limit, offset, total } = pagination
   const { query } = location
 
@@ -49,18 +49,44 @@ const Home = ({ loading, dispatch, location, home }) => {
     },
   })
 
+  const handleChangeIndex = (index) => {
+    console.log(index);
+    dispatch({
+      type: 'home/updateState',
+      payload: {
+        index,
+      },
+    })
+  }
+
   return (
     <MuiThemeProvider>
       <div className={styles.home}>
-      <Tabs>
-        {
-          Array.from({length:3}).map((item,key) => (
-            <Tab label={`选项${key}`} key={key}>
-              <ListView {...listProps} />
-            </Tab>
-          ))
-        }
-      </Tabs>
+      <div className={styles.menu}>
+        <Swiper index={index} onChangeIndex={handleChangeIndex} >
+          {
+            Array.from({length:3}).map((item,key) => (
+              <FlatButton key={key} label={"按钮"+key} />
+            ))
+          }
+        </Swiper>
+      </div>
+      <div className={styles.content}>
+        <Swiper index={index} onChangeIndex={handleChangeIndex}
+          containerStyle={{
+            height: '100%',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+            {
+              Array.from({length:3}).map((item,key) => (
+                <div label={`选项${key}`} key={key} className={styles.slide}>
+                  <ListView {...listProps} />
+                </div>
+              ))
+            }
+          </Swiper>
+        </div>
       </div>
     </MuiThemeProvider>
   )

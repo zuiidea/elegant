@@ -14,6 +14,17 @@
   <!-- <script type="text/javascript">
     FastClick.attach(document.body)
   </script> -->
+  <script type="text/javascript">
+    (function() {
+      var __oldConsoleError = window.console.error.bind(console)
+      window.console.error = function(message, b) {
+        if (message.indexOf('Warning: Unknown prop') > -1) {
+          return false
+        }
+        __oldConsoleError(message)
+      }
+    })()
+  </script>
   <script src="/index.js"></script>
   <script src="/flexible.js"></script>
 </body>
