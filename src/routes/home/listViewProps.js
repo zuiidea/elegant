@@ -13,11 +13,12 @@ const getStyle = (element,attr) => {
     return  style
 }
 
-const listViewProps = ({ onScroll, loading, hasMore, ...other }) => {
+const listViewProps = ({ onScroll, loading, hasMore,newOffset, ...other }) => {
   return {
     ...other,
     loading: hasMore,
     scrollerOptions:{
+      zooming: false,
       onScroll() {
         const element= document.querySelectorAll('.am-list-view-scrollview-content')[0]
         const clientHeight = document.body.clientHeight - 52
@@ -32,7 +33,7 @@ const listViewProps = ({ onScroll, loading, hasMore, ...other }) => {
           && scrollTop - lastOffset > 0) {
           clearTimeout(timeId)
           timeId = setTimeout(() => {
-            onScroll()
+            onScroll(newOffset)
           }, 300)
         }
         lastOffset = scrollTop

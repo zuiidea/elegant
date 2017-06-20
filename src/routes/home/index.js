@@ -7,6 +7,7 @@ import styles from './index.less'
 import { ListView } from 'components'
 import listViewProps from './listViewProps'
 import classnames from 'classnames'
+import Infinite  from 'react-infinite'
 
 const Home = ({ loading, dispatch, location, home }) => {
   const { list, pagination, index } = home
@@ -31,18 +32,21 @@ const Home = ({ loading, dispatch, location, home }) => {
     )
   }
 
+  const newOffset =offset + limit
+
   const listProps = listViewProps({
     dataSource: list,
     hasMore: offset + limit < total,
     loading: loading.models['home/query'],
     emptyContent: '暂无',
     renderRow,
-    onScroll() {
-      console.log(offset,limit)
+    newOffset,
+    onScroll(newoff) {
+      console.log(offset,newOffset,newoff,limit)
       dispatch({
         type: 'home/query',
         payload: {
-          offset: offset + limit,
+          offset:newoff,
           limit,
           ...query,
         },
