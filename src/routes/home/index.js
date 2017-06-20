@@ -2,60 +2,19 @@ import React from 'react'
 import { connect } from 'dva'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import FlatButton from 'material-ui/FlatButton'
-import Swiper from 'react-swipeable-views'
+import Swiper from 'react-id-swiper'
 import styles from './index.less'
-import { ListView } from 'components'
-import listViewProps from './listViewProps'
 import classnames from 'classnames'
-import Infinite  from 'react-infinite'
+import ListItem from './ListItem'
+
+let menuSwiper = {}
+let contentSwiper = {}
 
 const Home = ({ loading, dispatch, location, home }) => {
   const { list, pagination, index } = home
   const { limit, offset, total } = pagination
   const { query } = location
-  console.log(offset,limit)
-
-  const renderRow = (item, sectionID, index) => {
-    return (
-      <section key={index} className={styles.item}>
-        <div className={styles.main}>
-          <div className={styles.maintext}>
-            <h3 className={styles.title}>{item.title}</h3>
-            <summary className={styles.summary}>{item.summary}</summary>
-          </div>
-          <div>
-            <img className={styles.banner} src={item.banner}/>
-          </div>
-        </div>
-        <div className={styles.date}>{item.createTime}</div>
-      </section>
-    )
-  }
-
-  const newOffset =offset + limit
-
-  const listProps = listViewProps({
-    dataSource: list,
-    hasMore: offset + limit < total,
-    loading: loading.models['home/query'],
-    emptyContent: '暂无',
-    renderRow,
-    newOffset,
-    onScroll(newoff) {
-      console.log(offset,newOffset,newoff,limit)
-      dispatch({
-        type: 'home/query',
-        payload: {
-          offset:newoff,
-          limit,
-          ...query,
-        },
-      })
-    },
-  })
-
   const handleChangeIndex = (index) => {
-    console.log(index);
     dispatch({
       type: 'home/updateState',
       payload: {
@@ -64,24 +23,70 @@ const Home = ({ loading, dispatch, location, home }) => {
     })
   }
 
+  const handleOnScroll = (e) => {
+    console.log(e)
+  }
+
+  const menuProps = {
+    spaceBetween: 0,
+    initialSlide:2,
+    runCallbacksOnInit: true,
+    onInit: (swiper) => {
+      menuSwiper = swiper
+    }
+  }
+
+  const contentProps = {
+    slidesPerView: 'auto',
+    onSlideChangeEnd:(swiper) => {
+      console.log(swiper)
+      menuSwiper.slideTo(swiper.activeIndex, 1000, false)
+    },
+    runCallbacksOnInit: true,
+    onInit: (swiper) => {
+      contentSwiper = swiper
+    }
+  }
+
+  const FlatButtonStyle={
+    height:lib.flexible.px2rem(28)+'rem',
+    lineHeight:lib.flexible.px2rem(28)+'rem',
+    minWidth:lib.flexible.px2rem(48)+'rem',
+    overflow:'visible',
+  }
+
+  const labelStyle = {
+    fontSize:lib.flexible.px2rem(13)+'rem',
+    paddingLeft:lib.flexible.px2rem(16)+'rem',
+    paddingRight:lib.flexible.px2rem(16)+'rem',
+    verticalAlign:'baseline',
+    fontWeight:'normal',
+  }
+
+  console.log(menuSwiper);
+
   return (
     <MuiThemeProvider>
       <div className={styles.home}>
       <div className={styles.menu}>
-        <Swiper index={index} onChangeIndex={handleChangeIndex}>
+        <Swiper {...menuProps}>
           {
-            Array.from({length:3}).map((item,key) => (
-              <FlatButton key={key} label={"按钮"+key} />
+            Array.from({length:8}).map((item,key) => (
+              <span key={key} ><FlatButton label={"按钮"+key} style={FlatButtonStyle} labelStyle={labelStyle} /></span>
             ))
           }
         </Swiper>
       </div>
       <div className={styles.content}>
-        <Swiper index={index} onChangeIndex={handleChangeIndex}  className={styles.slideContainer}>
+        <Swiper {...contentProps} className={styles.slideContainer}>
             {
               Array.from({length:3}).map((item,key) => (
-                <div label={`选项${key}`} key={key} className={styles.slide}>
-                  <ListView {...listProps} />
+                <div label={`选项${key}`} key={key} >
+                  <div className={styles.slide}>
+                    {
+                      list.map((item,index) => <ListItem key={index} data={item} />)
+                    }
+                  </div>
                 </div>
               ))
             }

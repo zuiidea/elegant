@@ -1,6 +1,6 @@
 @import "../../themes/vars.less";
 
-@containerHeight:~"calc(100vh - 72px)";
+@containerHeight:~"calc(100vh - 132px)";
 
 .home {
   background: #fff;
@@ -14,66 +14,60 @@
   right:0;
   z-index: 9;
   width: 100%;
-  height: 72px;
+  height: 100px;
   background: #fff;
+  :global{
+    .swiper-container{
+      width: 200px;
+      margin: 0 auto;
+      overflow: visible;
+    }
+    .swiper-wrapper{
+      padding: 0 36px;
+
+    }
+    .swiper-slide{
+      display: flex;
+      align-items: center;
+      height: 100px;
+      button{
+        color: #666!important;
+      }
+      &.swiper-slide-active{
+
+        button{
+          color: #000!important;
+          &::after{
+            content: '';
+            display: block;
+            width: 48px;
+            height: 6px;
+            background: #000;
+            position: absolute;
+            bottom: -5px;
+            border-radius: 4PX;
+            left: 50%;
+            margin-left: -18px;
+          }
+        }
+      }
+    }
+  }
 }
 .content{
   position: absolute;
   background: #fff;
-  // padding: 32px 32px 0 32px;
-  top: 72px;
+  top: 100px;
   left: 0;
   right:0;
   bottom: 0;
 }
-.item{
-  .main{
-    display: flex;
-    justify-content: space-between;
-    line-height: 1.8;
-    margin-bottom: 16px;
-  }
-  .maintext{
-    margin-right: 16px;
-    width: 100%;
-  }
-  .title{
-    font-size: 28px;
-    font-weight: normal;
-    color: #333;
-    margin: 0 0 16px 0;
-  }
-  .summary{
-    color: #666;
-    font-size: 24px;
-  }
-  .banner{
-    width: 280px;
-    height: auto;
-  }
-  .date {
-    color: #666;
-  }
-  & + .item{
-    margin-top: 32px;
-    padding-top: 32px;
-    .hairline(top, #ddd);
-  }
-}
 
-.listBody{
-  // height:~"calc(100vh - 108px)";
-}
-.slideContainer{
-  .slide{
-    // min-height: @containerHeight;
-    padding: 32px 32px 0 32px;
-    background: #fff;
-  }
-  :global{
-    .react-swipeable-view-container{
-      // height:@containerHeight;
-      // -webkit-overflow-scrolling: touch;
-    }
-  }
+
+.slide{
+  height: @containerHeight;
+  -webkit-overflow-scrolling: touch;
+  padding: 32px 32px 0 32px;
+  background: #fff;
+  overflow: scroll;
 }
