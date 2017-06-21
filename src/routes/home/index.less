@@ -7,7 +7,7 @@
   height: 100vh;
 }
 
-.menu {
+.menuContainer {
   position: fixed;
   top: 0;
   left: 0;
@@ -17,61 +17,57 @@
   height: 100px;
   background: #fff;
 
-  :global {
-    .swiper-container {
-      width: 200px;
-      margin: 0 auto;
-      overflow: visible;
+  .menuSlide {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    width: auto;
+    position: relative;
+
+    button {
+      color: #666!important;
     }
-
-    .swiper-wrapper {
-      padding: 0 36px;
-    }
-
-    .swiper-slide {
-      display: flex;
-      align-items: center;
-      height: 100px;
-
+    &.menuSlideActive {
       button {
-        color: #666!important;
-      }
+        color: #000!important;
 
-      &.swiper-slide-active {
-        button {
-          color: #000!important;
-
-          &::after {
-            content: '';
-            display: block;
-            width: 48px;
-            height: 6px;
-            background: #000;
-            position: absolute;
-            bottom: -5px;
-            border-radius: 4PX;
-            left: 50%;
-            margin-left: -18px;
-          }
+        &::after {
+          transition: all .3s ease;
+          content: '';
+          display: block;
+          width: 48px;
+          height: 6px;
+          background: #000;
+          position: absolute;
+          bottom: -5px;
+          border-radius: 4PX;
+          left: 50%;
+          margin-left: -18px;
         }
       }
     }
   }
+  .menuWrapper{
+    padding: 0 36px;
+  }
+
+
 }
 
-.content {
+.contentContainer {
   position: absolute;
   background: #fff;
   top: 100px;
   left: 0;
   right: 0;
   bottom: 0;
-}
 
-.slide {
-  height: @containerHeight;
-  -webkit-overflow-scrolling: touch;
-  padding: 32px 32px 0;
-  background: #fff;
-  overflow: scroll;
+  .contentSlide {
+    box-sizing: border-box;
+    height: @containerHeight;
+    -webkit-overflow-scrolling: touch;
+    padding: 32px 32px 0;
+    background: #fff;
+    overflow: scroll;
+  }
 }
