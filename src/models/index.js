@@ -1,5 +1,4 @@
 import modelExtend from 'dva-model-extend'
-import { pathMatch } from '../utils'
 
 const model = {
   reducers: {
@@ -22,7 +21,7 @@ const listView = modelExtend(model, {
       limit: 10,
     },
   },
-  
+
 })
 
 module.exports = {

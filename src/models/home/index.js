@@ -15,7 +15,7 @@ export default modelExtend(model, {
       limit: 10,
     },
     index: 0,
-    menuSwiper:{}
+    menuSwiper: {},
   },
 
   subscriptions: {

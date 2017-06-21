@@ -1,6 +1,6 @@
 import React from 'react'
 import { ListView } from 'antd-mobile'
-import  styles from './index.less'
+import styles from './index.less'
 
 const List = ({ loading, dataSource, emptyContent, ...otherProps }) => {
   return (dataSource.length === 0 ?
