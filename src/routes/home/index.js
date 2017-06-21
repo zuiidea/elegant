@@ -22,7 +22,7 @@ class Home extends React.Component {
       slidesPerView: 1,
       paginationClickable: true,
       spaceBetween: 0,
-      onSlideChangeEnd: (swiper) => {
+      onSlideChangeStart: (swiper) => {
         dispatch({
           type: 'home/updateState',
           payload: {
@@ -51,9 +51,9 @@ class Home extends React.Component {
     if (contentSwiper) {
       contentSwiper.slideTo(index, 500, false)
     }
-    if (menuSwiper) {
-      menuSwiper.slideTo(index, 500, false)
-    }
+    // if (menuSwiper) {
+    //   menuSwiper.slideTo(index, 500, false)
+    // }
 
     const FlatButtonStyle = {
       height: `${lib.flexible.px2rem(28)}rem`,
@@ -72,11 +72,27 @@ class Home extends React.Component {
       lineHeight: `${lib.flexible.px2rem(28)}rem`,
     }
 
+    // const menuSlideActive = document.querySelector(`.${styles.menuSlideActive}`)
+    // const menuWrapper = document.querySelector(`.${styles.menuWrapper}`)
+    const offset = 0
+    // if (menuSlideActive && menuWrapper) {
+    //   const { clientWidth, offsetLeft } = menuSlideActive
+    //   const { scrollWidth } = menuWrapper
+    //   offset = (scrollWidth - clientWidth) / 2 - offsetLeft
+    //   console.log(clientWidth, offsetLeft, scrollWidth, offset)
+    // }
+
+
     return (
       <MuiThemeProvider>
         <div className={styles.home}>
           <div className={classnames({ 'swiper-container': true, [styles.menuContainer]: true })}>
-            <div className={classnames({ 'swiper-wrapper': true })}>
+            <div
+              className={classnames({ 'swiper-wrapper': true, [styles.menuWrapper]: true })} style={{
+                transform: `translate3d(-${offset}px, 0px, 0px)`,
+                transitionDuration: '0ms',
+              }}
+            >
               {
                 Array.from({ length: 8 }).map((item, key) => (
                   <span

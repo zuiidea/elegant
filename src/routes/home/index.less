@@ -17,6 +17,10 @@
   height: 100px;
   background: #fff;
 
+  .menuWrapper {
+    color: #000;
+  }
+
   .menuSlide {
     display: flex;
     align-items: center;
@@ -25,12 +29,13 @@
     position: relative;
 
     button {
-      span{
+      span {
         color: #666!important;
-        transition: all .3s ease-in-out;
+        transition: all 0.4s ease-in-out;
       }
+
       &::after {
-        transition: all .3s ease-in-out;
+        transition: all 0.4s ease-in-out;
         content: '';
         display: block;
         height: 6px;
@@ -44,11 +49,13 @@
         width: 0;
       }
     }
+
     &.menuSlideActive {
       button {
-        span{
+        span {
           color: #000!important;
         }
+
         &::after {
           width: 48px;
           opacity: 1;
