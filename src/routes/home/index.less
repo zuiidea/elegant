@@ -25,33 +25,38 @@
     position: relative;
 
     button {
-      color: #666!important;
+      span{
+        color: #666!important;
+        transition: all .3s ease-in-out;
+      }
+      &::after {
+        transition: all .3s ease-in-out;
+        content: '';
+        display: block;
+        height: 6px;
+        background: #000;
+        position: absolute;
+        bottom: -5px;
+        border-radius: 4PX;
+        left: 50%;
+        margin-left: 0;
+        opacity: 0;
+        width: 0;
+      }
     }
     &.menuSlideActive {
       button {
-        color: #000!important;
-
+        span{
+          color: #000!important;
+        }
         &::after {
-          transition: all .3s ease;
-          content: '';
-          display: block;
           width: 48px;
-          height: 6px;
-          background: #000;
-          position: absolute;
-          bottom: -5px;
-          border-radius: 4PX;
-          left: 50%;
-          margin-left: -18px;
+          opacity: 1;
+          margin-left: -24px;
         }
       }
     }
   }
-  .menuWrapper{
-    padding: 0 36px;
-  }
-
-
 }
 
 .contentContainer {
