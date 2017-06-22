@@ -15,13 +15,18 @@ class Home extends React.Component {
       slidesPerView: 'auto',
       paginationClickable: true,
       spaceBetween: 0,
-      // centeredSlides: true,
+      runCallbacksOnInit: true,
     })
 
     this.contentSwiper = new Swiper(`.${styles.contentContainer}`, {
       slidesPerView: 1,
       paginationClickable: true,
       spaceBetween: 0,
+      // effect: 'flip',
+      // flip: {
+      //   slideShadows: true,
+      //   limitRotation: true,
+      // },
       onSlideChangeStart: (swiper) => {
         dispatch({
           type: 'home/updateState',
@@ -35,6 +40,10 @@ class Home extends React.Component {
 
   handleMenuItemClick = (index) => {
     const { dispatch } = this.props
+    const { menuSwiper } = this
+    if (menuSwiper) {
+      menuSwiper.wrapper.css('transition-duration', '500ms')
+    }
     dispatch({
       type: 'home/updateState',
       payload: {
@@ -51,9 +60,18 @@ class Home extends React.Component {
     if (contentSwiper) {
       contentSwiper.slideTo(index, 500, false)
     }
-    // if (menuSwiper) {
-    //   menuSwiper.slideTo(index, 500, false)
-    // }
+
+    let offset = 0
+    if (menuSwiper) {
+      const { virtualSize, width, slidesGrid, slidesSizesGrid } = menuSwiper
+      offset = slidesGrid[index] - (width / 2) + slidesSizesGrid[index] / 2
+      const maxOffset = virtualSize - width
+      if (offset < 0) {
+        offset = 0
+      } else if (offset > maxOffset) {
+        offset = maxOffset
+      }
+    }
 
     const FlatButtonStyle = {
       height: `${lib.flexible.px2rem(28)}rem`,
@@ -72,17 +90,6 @@ class Home extends React.Component {
       lineHeight: `${lib.flexible.px2rem(28)}rem`,
     }
 
-    // const menuSlideActive = document.querySelector(`.${styles.menuSlideActive}`)
-    // const menuWrapper = document.querySelector(`.${styles.menuWrapper}`)
-    const offset = 0
-    // if (menuSlideActive && menuWrapper) {
-    //   const { clientWidth, offsetLeft } = menuSlideActive
-    //   const { scrollWidth } = menuWrapper
-    //   offset = (scrollWidth - clientWidth) / 2 - offsetLeft
-    //   console.log(clientWidth, offsetLeft, scrollWidth, offset)
-    // }
-
-
     return (
       <MuiThemeProvider>
         <div className={styles.home}>
@@ -90,7 +97,7 @@ class Home extends React.Component {
             <div
               className={classnames({ 'swiper-wrapper': true, [styles.menuWrapper]: true })} style={{
                 transform: `translate3d(-${offset}px, 0px, 0px)`,
-                transitionDuration: '0ms',
+                transitionDuration: '500ms',
               }}
             >
               {
