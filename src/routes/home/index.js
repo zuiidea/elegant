@@ -64,12 +64,17 @@ class Home extends React.Component {
     let offset = 0
     if (menuSwiper) {
       const { virtualSize, width, slidesGrid, slidesSizesGrid } = menuSwiper
-      offset = slidesGrid[index] - (width / 2) + slidesSizesGrid[index] / 2
-      const maxOffset = virtualSize - width
-      if (offset < 0) {
-        offset = 0
-      } else if (offset > maxOffset) {
-        offset = maxOffset
+      const totalWidth = slidesSizesGrid.reduce((a, b) => a + b, 0)
+      if (totalWidth < width) {
+        offset = -(width - totalWidth) / 2
+      } else {
+        offset = slidesGrid[index] - (width / 2) + slidesSizesGrid[index] / 2
+        const maxOffset = virtualSize - width
+        if (offset < 0) {
+          offset = 0
+        } else if (offset > maxOffset) {
+          offset = maxOffset
+        }
       }
     }
 
@@ -96,7 +101,7 @@ class Home extends React.Component {
           <div className={classnames({ 'swiper-container': true, [styles.menuContainer]: true })}>
             <div
               className={classnames({ 'swiper-wrapper': true, [styles.menuWrapper]: true })} style={{
-                transform: `translate3d(-${offset}px, 0px, 0px)`,
+                transform: `translate3d(${-offset}px, 0px, 0px)`,
                 transitionDuration: '500ms',
               }}
             >
