@@ -14,6 +14,8 @@ export default modelExtend(model, {
       total: 0,
       limit: 10,
     },
+    index: 0,
+    menuSwiper: {},
   },
 
   subscriptions: {
@@ -40,7 +42,7 @@ export default modelExtend(model, {
         const { list } = yield select(item => item.home)
         const { total } = data
         const newData = (offset === 0 ? [] : list).concat(data.list)
-        
+
         yield put({ type: 'updateState',
           payload: {
             list: newData,

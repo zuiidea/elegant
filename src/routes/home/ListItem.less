@@ -1,0 +1,42 @@
+@import "../../themes/vars.less";
+
+.item {
+  .main {
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .maintext {
+    margin-right: 16px;
+    width: 100%;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: normal;
+    color: #333;
+    margin: 0 0 16px;
+  }
+
+  .summary {
+    color: #666;
+    font-size: 24px;
+  }
+
+  .banner {
+    width: 280px;
+    height: auto;
+  }
+
+  .date {
+    color: #666;
+  }
+
+  & + .item {
+    margin-top: 32px;
+    padding-top: 32px;
+    .hairline(top, #ddd);
+  }
+}

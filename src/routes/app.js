@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'dva'
 import './app.less'
 
-const App = ({ children, app }) => {
+const App = ({ children }) => {
   return (
     <div>
       {children}

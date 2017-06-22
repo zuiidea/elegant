@@ -15,6 +15,8 @@ module.exports = (webpackConfig) => {
     }
     return item
   }).join('!')
+  
+  // webpackConfig.module.rules[3].use[1].options.localIdentName = '[hash:base64:5]'
 
   webpackConfig.resolve.alias = {
     components: __dirname + '/src/components',

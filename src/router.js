@@ -14,8 +14,8 @@ const Routers = ({ history, app }) => {
     {
       path: '/',
       component: App,
-      getIndexRoute (nextState, cb) {
-        require.ensure([], require => {
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
           registerModel(app, require('./models/home/'))
           cb(null, { component: require('./routes/home/') })
         }, 'home')

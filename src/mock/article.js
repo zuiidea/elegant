@@ -19,7 +19,7 @@ module.exports = {
 
     res.status(200).json({
       list: data,
-      total: database.length
+      total: database.length,
     })
   },
 }
