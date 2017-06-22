@@ -1,8 +1,6 @@
 import React from 'react'
 import styles from './ListItem.less'
 
-console.log(styles)
-
 const ListItem = ({ data }) => {
   const { title, summary, banner, createTime } = data
   return (

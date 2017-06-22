@@ -1,15 +1,11 @@
 import pathToRegexp from 'path-to-regexp'
 import axios from 'axios'
 import lodash from 'lodash'
-import { prefix } from './config'
 
 const fetch = (options) => {
   const { method = 'get', data = {} } = options
   let { url } = options
-
   const cloneData = lodash.cloneDeep(data)
-  const headers = {}
-
   try {
     let domin = ''
     if (url.match(/[a-zA-z]+:\/\/[^/]*/)) {

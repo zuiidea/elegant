@@ -10,7 +10,7 @@ Include below common usage:
 
 ```
 npm install
-npm start
+npm run dev
 ```
 
 http://localhost:8080
