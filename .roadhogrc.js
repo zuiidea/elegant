@@ -11,12 +11,11 @@ export default {
   svgSpriteLoaderDirs: svgSpriteDirs,
   "theme": "./theme.config.js",
   "proxy": {
-    // "/api": {
-    //   // "target": "http://distribution.l.kkguan.com",
-    //   "target": "http://distribution-api.t.kkguan.com",
-    //   "changeOrigin": true,
-    //   "pathRewrite": { "^/api" : "/api" }
-    // },
+    "/api": {
+      "target": "https://sspai.com",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api/v1" : "/api/v1" }
+    },
   },
   env: {
     development: {

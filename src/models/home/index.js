@@ -4,26 +4,32 @@ import { model } from 'models'
 
 const { query } = articles
 
+const tags = ['matrix', '效率工具', '手机摄影', '生活方式', '游戏', '硬件', '人物']
+
 export default modelExtend(model, {
   namespace: 'home',
 
   state: {
     list: [],
+    tags,
     pagination: {
       offset: 0,
       total: 0,
       limit: 10,
     },
     index: 0,
-    menuSwiper: {},
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
-      history.listen(({ pathname }) => {
-        if (pathname === '/') {
+      history.listen((location) => {
+        if (location.pathname === '/') {
           dispatch({
             type: 'query',
+            payload: {
+              tag: tags[0],
+              ...location.query,
+            },
           })
         }
       })
@@ -41,7 +47,10 @@ export default modelExtend(model, {
       if (success) {
         const { list } = yield select(item => item.home)
         const { total } = data
-        const newData = (offset === 0 ? [] : list).concat(data.list)
+        const newData = (offset === 0 ? [] : list).concat(data.list.map(item => ({
+          ...item,
+          banner: item.banner ? `https://cdn.sspai.com/${item.banner}?imageMogr2/quality/95/thumbnail/!360x220r/gravity/Center/crop/360x260` : '',
+        })))
 
         yield put({ type: 'updateState',
           payload: {
