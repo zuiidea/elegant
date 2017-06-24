@@ -4,31 +4,30 @@ import { model } from 'models'
 
 const { query } = articles
 
-const tags = ['matrix', '效率工具', '手机摄影', '生活方式', '游戏', '硬件', '人物']
+const tags = [
+  '效率工具', '手机摄影', '生活方式',
+  '游戏', '硬件', '人物',
+]
 
 export default modelExtend(model, {
   namespace: 'home',
 
   state: {
-    list: [],
     tags,
-    pagination: {
-      offset: 0,
-      total: 0,
-      limit: 10,
-    },
     index: 0,
+    data0: {},
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/') {
+          const tag = location.query.tag || tags[0]
           dispatch({
-            type: 'query',
+            type: 'preQuery',
             payload: {
-              tag: tags[0],
-              ...location.query,
+              tag,
+              index: tags.indexOf(tag),
             },
           })
         }
@@ -37,28 +36,52 @@ export default modelExtend(model, {
   },
 
   effects: {
+    *preQuery({
+      payload = {},
+    }, { put }) {
+      yield put({
+        type: 'query',
+        payload,
+      })
+      for (let i = 0; i < tags.length; i += 1) {
+        if (tags[i] !== payload.tag) {
+          yield put({
+            type: 'query',
+            payload: {
+              tag: tags[i],
+              index: i,
+            },
+          })
+        }
+      }
+    },
     *query({
       payload = {},
     }, { call, put, select }) {
-      const result = yield call(query, payload)
+      const { tag, index } = payload
+      const { limit = 5, offset = 0 } = payload
+      const result = yield call(query, { tag, limit, offset })
       const { success, data } = result
-      const { limit = 10, offset = 0 } = payload
 
       if (success) {
         const { list } = yield select(item => item.home)
         const { total } = data
         const newData = (offset === 0 ? [] : list).concat(data.list.map(item => ({
-          ...item,
+          id: item.id,
+          summary: item.summary,
+          title: item.title,
           banner: item.banner ? `https://cdn.sspai.com/${item.banner}?imageMogr2/quality/95/thumbnail/!360x220r/gravity/Center/crop/360x260` : '',
         })))
 
         yield put({ type: 'updateState',
           payload: {
-            list: newData,
-            pagination: {
-              total,
-              limit,
-              offset,
+            [`data${index}`]: {
+              list: newData,
+              pagination: {
+                total,
+                limit,
+                offset,
+              },
             },
           },
         })

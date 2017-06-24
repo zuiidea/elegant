@@ -7,6 +7,23 @@ import Swiper from 'swiper'
 import styles from './index.less'
 import ListItem from './ListItem'
 
+const FlatButtonStyle = {
+  height: `${lib.flexible.px2rem(28)}rem`,
+  lineHeight: `${lib.flexible.px2rem(28)}rem`,
+  minWidth: `${lib.flexible.px2rem(48)}rem`,
+  boxShadow: 'none',
+  overflow: 'visible',
+}
+
+const labelStyle = {
+  fontSize: `${lib.flexible.px2rem(12)}rem`,
+  fontWeight: 'normal',
+}
+
+const overlayStyle = {
+  lineHeight: `${lib.flexible.px2rem(28)}rem`,
+}
+
 class Home extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props
@@ -53,14 +70,15 @@ class Home extends React.Component {
 
   render() {
     const { home } = this.props
-    const { list, index, tags } = home
+    const { index, tags } = home
     const { handleMenuItemClick, contentSwiper, menuSwiper } = this
 
     if (contentSwiper) {
       contentSwiper.slideTo(index, 500, false)
     }
 
-    let offset = 0
+    // 调整菜单位置
+    let menuOffset = 0
     let menuSwiperCenter = true
     if (menuSwiper) {
       const { virtualSize, width, slidesGrid, slidesSizesGrid } = menuSwiper
@@ -69,33 +87,15 @@ class Home extends React.Component {
         menuSwiper.disableTouchControl()
       } else {
         menuSwiperCenter = false
-        offset = slidesGrid[index] - (width / 2) + slidesSizesGrid[index] / 2
+        menuOffset = slidesGrid[index] - (width / 2) + slidesSizesGrid[index] / 2
         const maxOffset = virtualSize - width
-        if (offset < 0) {
-          offset = 0
-        } else if (offset > maxOffset) {
-          offset = maxOffset
+        if (menuOffset < 0) {
+          menuOffset = 0
+        } else if (menuOffset > maxOffset) {
+          menuOffset = maxOffset
         }
       }
     }
-
-    const FlatButtonStyle = {
-      height: `${lib.flexible.px2rem(28)}rem`,
-      lineHeight: `${lib.flexible.px2rem(28)}rem`,
-      minWidth: `${lib.flexible.px2rem(48)}rem`,
-      boxShadow: 'none',
-      overflow: 'visible',
-    }
-
-    const labelStyle = {
-      fontSize: `${lib.flexible.px2rem(12)}rem`,
-      fontWeight: 'normal',
-    }
-
-    const overlayStyle = {
-      lineHeight: `${lib.flexible.px2rem(28)}rem`,
-    }
-
 
     return (
       <MuiThemeProvider>
@@ -103,7 +103,7 @@ class Home extends React.Component {
           <div className={classnames('swiper-container', { [styles.menuContainer]: true })}>
             <div
               className={classnames('swiper-wrapper', styles.menuWrapper, { [styles.menuWrapperCenter]: menuSwiperCenter })}
-              style={{ transform: `translate3d(${-offset}px, 0px, 0px)` }}
+              style={{ transform: `translate3d(${-menuOffset}px, 0px, 0px)` }}
             >
               {
                 tags.map((item, key) => (
@@ -127,10 +127,12 @@ class Home extends React.Component {
             <div className={classnames('swiper-container', { [styles.contentContainer]: true })} >
               <div className="swiper-wrapper">
                 {
-                    Array.from({ length: 3 }).map((item, key) => (
+                    Array.from({ length: tags.length }).map((item, key) => (
                       <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })}>
                         {
-                          list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
+                          home[`data${key}`] && home[`data${key}`].list ?
+                          home[`data${key}`].list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
+                          : ''
                         }
                       </div>
                     ))
