@@ -35,7 +35,7 @@
 
     button {
       span {
-        color: #666!important;
+        color: #999!important;
         transition: all 0.4s ease-in-out;
       }
 
@@ -83,7 +83,7 @@
 
   .contentSlide {
     box-sizing: border-box;
-    // height: @containerHeight;
+    min-height: @containerHeight;
     -webkit-overflow-scrolling: touch;
     padding: 32px 32px 0;
     background: #fff;
@@ -98,4 +98,25 @@
     backface-visibility: hidden;
     perspective: 1000;
   }
+}
+.listFooter{
+  height: 120px;
+  text-align: center;
+  color: #999;
+  display: flex;
+  align-items: center;
+}
+
+.listFooterLoading{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .listFooterText{
+    margin-left: 16px;
+  }
+}
+.listFooterLoaded{
+  color: #ccc;
+  text-align: center;
+  width: 100%;
 }

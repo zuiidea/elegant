@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './ListItem.less'
+import styles from './index.less'
 
 const ListItem = ({ data }) => {
   const { title, summary, banner, createTime } = data

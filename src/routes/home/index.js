@@ -1,11 +1,12 @@
 import React from 'react'
 import classnames from 'classnames'
+import { Loader, ListItem } from 'components'
 import { connect } from 'dva'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import CircularProgress from 'material-ui/CircularProgress'
 import FlatButton from 'material-ui/RaisedButton'
 import Swiper from 'swiper'
 import styles from './index.less'
-import ListItem from './ListItem'
 
 const FlatButtonStyle = {
   height: `${lib.flexible.px2rem(28)}rem`,
@@ -83,7 +84,7 @@ class Home extends React.Component {
     const { home, loading, dispatch } = this.props
     const { index, tags } = home
     const data = home[`data${index}`]
-    const { pagination } = data
+    const { pagination, list } = data
     const { limit, offset, total } = pagination
     const lastOffset = this.lastOffset[index]
     const timeId = this.timeId[index]
@@ -97,11 +98,24 @@ class Home extends React.Component {
       clearTimeout(timeId)
       this.timeId[index] = setTimeout(() => {
         dispatch({
+          type: 'home/updateState',
+          payload: {
+            [`data${index}`]: {
+              list,
+              pagination: {
+                offset: offset + limit,
+                limit,
+                total,
+              },
+            },
+          },
+        })
+        dispatch({
           type: `home/query${index}`,
           payload: {
             offset: offset + limit,
-            tag: tags[index],
             limit,
+            tag: tags[index],
             index,
           },
         })
@@ -111,9 +125,13 @@ class Home extends React.Component {
   }
 
   render() {
-    const { home } = this.props
+    const { home, loading } = this.props
     const { index, tags } = home
     const { handleMenuItemClick, handleScorll, contentSwiper, menuSwiper } = this
+
+    const current = home[`data${index}`]
+    const { total, limit, offset } = current.pagination
+    const length = current.list.length
 
     if (contentSwiper) {
       contentSwiper.slideTo(index, 300, false)
@@ -142,6 +160,9 @@ class Home extends React.Component {
     return (
       <MuiThemeProvider>
         <div className={styles.home}>
+          <Loader
+            spinning={loading.effects['home/query'] && offset === 0 && length === 0}
+          />
           <div className={classnames('swiper-container', { [styles.menuContainer]: true })}>
             <div
               className={classnames('swiper-wrapper', styles.menuWrapper, { [styles.menuWrapperCenter]: menuSwiperCenter })}
@@ -169,14 +190,28 @@ class Home extends React.Component {
             <div className={classnames('swiper-container', { [styles.contentContainer]: true })} >
               <div className="swiper-wrapper">
                 {
-                    Array.from({ length: tags.length }).map((item, key) => (
-                      <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })} onScroll={handleScorll}>
+                  Array.from({ length: tags.length }).map((item, key) => (
+                    <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })} onScroll={handleScorll}>
+                      {
+                        home[`data${key}`].list.length
+                        ? home[`data${key}`].list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
+                        : <div style={{ textAlign: 'center', color: '#999' }}>暂无数据</div>
+                      }
+                      <div className={styles.listFooter}>
                         {
-                          home[`data${key}`].list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
+                          (length + limit < total && length > 9)
+                          ? <div className={styles.listFooterLoading}>
+                            <CircularProgress color="#000" size={20} thickness={2} />
+                            <div className={styles.listFooterText}>加载中...</div>
+                          </div>
+                          : <div className={styles.listFooterLoaded}>
+                            已加载到底部
+                          </div>
                         }
                       </div>
-                    ))
-                  }
+                    </div>
+                  ))
+                }
               </div>
             </div>
           </div>

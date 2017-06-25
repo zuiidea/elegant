@@ -20,7 +20,7 @@ const homeModel = modelExtend(model, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/') {
+        if (location.pathname === '/' || location.pathname === '/home') {
           const tag = location.query.tag || tags[0]
           dispatch({
             type: 'preQuery',
