@@ -25,12 +25,25 @@ const overlayStyle = {
 }
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props)
+    const { home } = props
+    const { tags } = home
+    this.lastOffset = []
+    this.timeId = []
+    tags.forEach((item, index) => {
+      this.lastOffset[index] = 0
+      this.timeId[index] = 0
+    })
+  }
+
   componentDidMount() {
     const { dispatch } = this.props
     this.menuSwiper = new Swiper(`.${styles.menuContainer}`, {
       slidesPerView: 'auto',
       paginationClickable: true,
       spaceBetween: 0,
+      touchRatio: 0.5,
       runCallbacksOnInit: true,
     })
 
@@ -38,11 +51,8 @@ class Home extends React.Component {
       slidesPerView: 1,
       paginationClickable: true,
       spaceBetween: 0,
-      // effect: 'flip',
-      // flip: {
-      //   slideShadows: true,
-      //   limitRotation: true,
-      // },
+      touchRatio: 0.6,
+      speed: 300,
       onSlideChangeStart: (swiper) => {
         dispatch({
           type: 'home/updateState',
@@ -68,13 +78,45 @@ class Home extends React.Component {
     })
   }
 
+  handleScorll = (e) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.target
+    const { home, loading, dispatch } = this.props
+    const { index, tags } = home
+    const data = home[`data${index}`]
+    const { pagination } = data
+    const { limit, offset, total } = pagination
+    const lastOffset = this.lastOffset[index]
+    const timeId = this.timeId[index]
+    const cases = [
+      scrollHeight - (scrollTop + clientHeight) < 1000,
+      scrollTop - lastOffset > 0,
+      limit + offset < total,
+      !loading.effects['home/query'],
+    ]
+    if (cases.every(item => item)) {
+      clearTimeout(timeId)
+      this.timeId[index] = setTimeout(() => {
+        dispatch({
+          type: `home/query${index}`,
+          payload: {
+            offset: offset + limit,
+            tag: tags[index],
+            limit,
+            index,
+          },
+        })
+      }, 300)
+    }
+    this.lastOffset[index] = scrollTop
+  }
+
   render() {
     const { home } = this.props
     const { index, tags } = home
-    const { handleMenuItemClick, contentSwiper, menuSwiper } = this
+    const { handleMenuItemClick, handleScorll, contentSwiper, menuSwiper } = this
 
     if (contentSwiper) {
-      contentSwiper.slideTo(index, 500, false)
+      contentSwiper.slideTo(index, 300, false)
     }
 
     // 调整菜单位置
@@ -128,11 +170,9 @@ class Home extends React.Component {
               <div className="swiper-wrapper">
                 {
                     Array.from({ length: tags.length }).map((item, key) => (
-                      <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })}>
+                      <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })} onScroll={handleScorll}>
                         {
-                          home[`data${key}`] && home[`data${key}`].list ?
                           home[`data${key}`].list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
-                          : ''
                         }
                       </div>
                     ))

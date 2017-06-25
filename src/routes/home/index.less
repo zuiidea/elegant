@@ -17,10 +17,11 @@
   height: 100px;
   background: #fff;
 
-  .menuWrapper{
-    transition-duration:.5s;
+  .menuWrapper {
+    transition-duration: 0.5s;
   }
-  .menuWrapperCenter{
+
+  .menuWrapperCenter {
     justify-content: center;
     display: flex;
   }
@@ -78,6 +79,8 @@
   right: 0;
   bottom: 0;
 
+
+
   .contentSlide {
     box-sizing: border-box;
     // height: @containerHeight;
@@ -86,5 +89,13 @@
     background: #fff;
     overflow: scroll;
     overflow-x: hidden;
+  }
+}
+
+:global {
+  .swiper-wrapper {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000;
   }
 }

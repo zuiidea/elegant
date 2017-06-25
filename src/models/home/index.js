@@ -9,13 +9,12 @@ const tags = [
   '游戏', '硬件', '人物',
 ]
 
-export default modelExtend(model, {
+const homeModel = modelExtend(model, {
   namespace: 'home',
 
   state: {
     tags,
     index: 0,
-    data0: {},
   },
 
   subscriptions: {
@@ -40,13 +39,13 @@ export default modelExtend(model, {
       payload = {},
     }, { put }) {
       yield put({
-        type: 'query',
+        type: `query${payload.index}`,
         payload,
       })
       for (let i = 0; i < tags.length; i += 1) {
         if (tags[i] !== payload.tag) {
           yield put({
-            type: 'query',
+            type: `query${i}`,
             payload: {
               tag: tags[i],
               index: i,
@@ -59,12 +58,13 @@ export default modelExtend(model, {
       payload = {},
     }, { call, put, select }) {
       const { tag, index } = payload
-      const { limit = 5, offset = 0 } = payload
+      const { limit = 10, offset = 0 } = payload
       const result = yield call(query, { tag, limit, offset })
       const { success, data } = result
 
       if (success) {
-        const { list } = yield select(item => item.home)
+        const state = yield select(item => item.home)
+        const { list } = state[`data${index}`]
         const { total } = data
         const newData = (offset === 0 ? [] : list).concat(data.list.map(item => ({
           id: item.id,
@@ -92,3 +92,26 @@ export default modelExtend(model, {
     },
   },
 })
+
+
+tags.forEach((item, index) => {
+  homeModel.state[`data${index}`] = {
+    list: [],
+    pagination: {
+      limit: 10,
+      offset: 0,
+      total: 0,
+    },
+  }
+
+  homeModel.effects[`query${index}`] = function *({
+    payload = {},
+  }, { put }) {
+    yield put({
+      type: 'query',
+      payload,
+    })
+  }
+})
+
+export default homeModel
