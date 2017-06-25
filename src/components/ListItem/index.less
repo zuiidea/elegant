@@ -1,11 +1,12 @@
 @import "../../themes/vars.less";
 
 .item {
+  min-height: 172px;
+  display: block;
   .main {
-    display: flex;
-    justify-content: space-between;
     line-height: 1.8;
     margin-bottom: 16px;
+    position: relative;
   }
 
   .maintext {
@@ -28,6 +29,9 @@
   .banner {
     width: 280px;
     height: auto;
+    float: right;
+    padding: 0 0 0 16px;
+    z-index: 1;
   }
 
   .date {
