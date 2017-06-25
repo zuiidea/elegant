@@ -4,11 +4,11 @@ import { Loader, ListItem } from 'components'
 import { connect } from 'dva'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import CircularProgress from 'material-ui/CircularProgress'
-import FlatButton from 'material-ui/RaisedButton'
+import RaisedButton from 'material-ui/RaisedButton'
 import Swiper from 'swiper'
 import styles from './index.less'
 
-const FlatButtonStyle = {
+const RaisedButtonStyle = {
   height: `${lib.flexible.px2rem(28)}rem`,
   lineHeight: `${lib.flexible.px2rem(28)}rem`,
   minWidth: `${lib.flexible.px2rem(48)}rem`,
@@ -25,11 +25,11 @@ const overlayStyle = {
   lineHeight: `${lib.flexible.px2rem(28)}rem`,
 }
 
-class Home extends React.Component {
+class Article extends React.Component {
   constructor(props) {
     super(props)
-    const { home } = props
-    const { tags } = home
+    const { article } = props
+    const { tags } = article
     this.lastOffset = []
     this.timeId = []
     tags.forEach((item, index) => {
@@ -56,7 +56,7 @@ class Home extends React.Component {
       speed: 300,
       onSlideChangeStart: (swiper) => {
         dispatch({
-          type: 'home/updateState',
+          type: 'article/updateState',
           payload: {
             index: swiper.activeIndex,
           },
@@ -72,7 +72,7 @@ class Home extends React.Component {
       menuSwiper.wrapper.css('transition-duration', '500ms')
     }
     dispatch({
-      type: 'home/updateState',
+      type: 'article/updateState',
       payload: {
         index,
       },
@@ -81,9 +81,9 @@ class Home extends React.Component {
 
   handleScorll = (e) => {
     const { scrollHeight, scrollTop, clientHeight } = e.target
-    const { home, loading, dispatch } = this.props
-    const { index, tags } = home
-    const data = home[`data${index}`]
+    const { article, loading, dispatch } = this.props
+    const { index, tags } = article
+    const data = article[`data${index}`]
     const { pagination, list } = data
     const { limit, offset, total } = pagination
     const lastOffset = this.lastOffset[index]
@@ -92,13 +92,13 @@ class Home extends React.Component {
       scrollHeight - (scrollTop + clientHeight) < 1000,
       scrollTop - lastOffset > 0,
       limit + offset < total,
-      !loading.effects['home/query'],
+      !loading.effects['article/query'],
     ]
     if (cases.every(item => item)) {
       clearTimeout(timeId)
       this.timeId[index] = setTimeout(() => {
         dispatch({
-          type: 'home/updateState',
+          type: 'article/updateState',
           payload: {
             [`data${index}`]: {
               list,
@@ -111,7 +111,7 @@ class Home extends React.Component {
           },
         })
         dispatch({
-          type: `home/query${index}`,
+          type: `article/query${index}`,
           payload: {
             offset: offset + limit,
             limit,
@@ -125,13 +125,14 @@ class Home extends React.Component {
   }
 
   render() {
-    const { home, loading } = this.props
-    const { index, tags } = home
+    const { article, loading } = this.props
+    const { index, tags } = article
     const { handleMenuItemClick, handleScorll, contentSwiper, menuSwiper } = this
 
-    const current = home[`data${index}`]
-    const { total, limit, offset } = current.pagination
-    const length = current.list.length
+    const current = article[`data${index}`]
+    const { list, pagination } = current
+    const { total, limit, offset } = pagination
+    const length = list.length
 
     if (contentSwiper) {
       contentSwiper.slideTo(index, 300, false)
@@ -161,7 +162,7 @@ class Home extends React.Component {
       <MuiThemeProvider>
         <div className={styles.home}>
           <Loader
-            spinning={loading.effects['home/query'] && offset === 0 && length === 0}
+            spinning={loading.effects['article/query'] && offset === 0 && length === 0}
           />
           <div className={classnames('swiper-container', { [styles.menuContainer]: true })}>
             <div
@@ -175,9 +176,9 @@ class Home extends React.Component {
                     onClick={handleMenuItemClick.bind(null, key)}
                     className={classnames('swiper-slide', { [styles.menuSlide]: true, [styles.menuSlideActive]: key === index })}
                   >
-                    <FlatButton
+                    <RaisedButton
                       label={item}
-                      style={FlatButtonStyle}
+                      style={RaisedButtonStyle}
                       labelStyle={labelStyle}
                       overlayStyle={overlayStyle}
                     />
@@ -193,8 +194,8 @@ class Home extends React.Component {
                   Array.from({ length: tags.length }).map((item, key) => (
                     <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })} onScroll={handleScorll}>
                       {
-                        home[`data${key}`].list.length
-                        ? home[`data${key}`].list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
+                        length
+                        ? list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
                         : <div style={{ textAlign: 'center', color: '#999' }}>暂无数据</div>
                       }
                       <div className={styles.listFooter}>
@@ -222,4 +223,4 @@ class Home extends React.Component {
 }
 
 
-export default connect(({ home, loading }) => ({ home, loading }))(Home)
+export default connect(({ article, loading }) => ({ article, loading }))(Article)

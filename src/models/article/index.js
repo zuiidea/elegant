@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
-import { articles } from 'services'
 import { model } from 'models'
+import { articles } from 'services'
 
 const { query } = articles
 
@@ -9,8 +9,8 @@ const tags = [
   '游戏', '硬件', '人物',
 ]
 
-const homeModel = modelExtend(model, {
-  namespace: 'home',
+const articleModel = modelExtend(model, {
+  namespace: 'article',
 
   state: {
     tags,
@@ -20,7 +20,7 @@ const homeModel = modelExtend(model, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/' || location.pathname === '/home') {
+        if (location.pathname === '/' || location.pathname === '/article') {
           const tag = location.query.tag || tags[0]
           dispatch({
             type: 'preQuery',
@@ -37,7 +37,11 @@ const homeModel = modelExtend(model, {
   effects: {
     *preQuery({
       payload = {},
-    }, { put }) {
+    }, { put, select }) {
+      const state = yield select(item => item.article)
+      if (state[`data${payload.index}`].list.length) {
+        return
+      }
       yield put({
         type: `query${payload.index}`,
         payload,
@@ -63,7 +67,7 @@ const homeModel = modelExtend(model, {
       const { success, data } = result
 
       if (success) {
-        const state = yield select(item => item.home)
+        const state = yield select(item => item.article)
         const { list } = state[`data${index}`]
         const { total } = data
         const newData = (offset === 0 ? [] : list).concat(data.list.map(item => ({
@@ -95,7 +99,7 @@ const homeModel = modelExtend(model, {
 
 
 tags.forEach((item, index) => {
-  homeModel.state[`data${index}`] = {
+  articleModel.state[`data${index}`] = {
     list: [],
     pagination: {
       limit: 10,
@@ -104,7 +108,7 @@ tags.forEach((item, index) => {
     },
   }
 
-  homeModel.effects[`query${index}`] = function *({
+  articleModel.effects[`query${index}`] = function *({
     payload = {},
   }, { put }) {
     yield put({
@@ -114,4 +118,4 @@ tags.forEach((item, index) => {
   }
 })
 
-export default homeModel
+export default articleModel
