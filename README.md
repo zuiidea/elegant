@@ -1,16 +1,35 @@
-## SUBE
+### SUBE
 
-Include below common usage:
+An article List
 
-- custom svg config
-- rem config
-- custom theme config
+[Live Demo](http://47.92.30.98:8080)
 
-### dev
+### Quick Start
 
+clone
+```bash
+git clone https://github.com/zuiidea/sube.git
 ```
+
+install
+```bash
 npm install
-npm run dev
 ```
 
-http://localhost:8080
+develop
+```bash
+npm run dev
+open http://localhost:8080
+```
+
+build
+
+```bash
+npm run build
+
+Generate dist Folder
+```
+
+### Screenshot
+
+![](assets/demo.gif)
