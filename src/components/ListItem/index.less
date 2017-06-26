@@ -3,9 +3,15 @@
 .item {
   min-height: 172px;
   display: block;
+  padding: 32px;
+  transition: all 0.3s ease;
+
+  &:active {
+    background: #eee;
+  }
+
   .main {
     line-height: 1.8;
-    margin-bottom: 16px;
     position: relative;
   }
 
@@ -39,8 +45,11 @@
   }
 
   & + .item {
-    margin-top: 32px;
-    padding-top: 32px;
     .hairline(top, #ddd);
+    &::before{
+      width: auto;
+      left: 32px;
+      right: 32px;
+    }
   }
 }

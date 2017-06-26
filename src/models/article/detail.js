@@ -5,8 +5,6 @@ import pathToRegexp from 'path-to-regexp'
 
 const { query } = article
 
-console.log(model)
-
 export default modelExtend(model, {
   namespace: 'articleDetail',
   state: {
@@ -37,6 +35,7 @@ export default modelExtend(model, {
       payload,
     }, { put, select }) {
       const { current } = yield select(_ => _.articleDetail)
+      console.log(current, payload.id)
       if (current !== payload.id) {
         window.scrollTo(0, 0)
         yield put({
