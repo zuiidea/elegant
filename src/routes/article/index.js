@@ -2,6 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import { Loader, ListItem } from 'components'
 import { connect } from 'dva'
+import { routerRedux } from 'dva/router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -39,18 +40,20 @@ class Article extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { dispatch, article } = this.props
+    const { index, scrollTops } = article
     this.menuSwiper = new Swiper(`.${styles.menuContainer}`, {
+      initialSlide: index,
       slidesPerView: 'auto',
-      paginationClickable: true,
+      paginationClickable: false,
       spaceBetween: 0,
       touchRatio: 0.5,
-      runCallbacksOnInit: true,
     })
 
     this.contentSwiper = new Swiper(`.${styles.contentContainer}`, {
+      initialSlide: index,
       slidesPerView: 1,
-      paginationClickable: true,
+      paginationClickable: false,
       spaceBetween: 0,
       touchRatio: 0.6,
       speed: 300,
@@ -62,6 +65,10 @@ class Article extends React.Component {
           },
         })
       },
+    })
+
+    this.contentSwiper.slides.each((i, item) => {
+      item.scrollTop = scrollTops[i] || 0
     })
   }
 
@@ -124,10 +131,31 @@ class Article extends React.Component {
     this.lastOffset[index] = scrollTop
   }
 
+  handleArticleClick = (id) => {
+    const { contentSwiper } = this
+    const { dispatch } = this.props
+    const scrollTops = []
+    if (contentSwiper) {
+      contentSwiper.slides.each((index, item) => {
+        scrollTops[index] = item.scrollTop
+      })
+    }
+    dispatch({
+      type: 'article/updateState',
+      payload: {
+        scrollTops,
+      },
+    })
+    dispatch(routerRedux.push({
+      pathname: `/article/${id}`,
+    }))
+  }
+
   render() {
     const { article, loading } = this.props
     const { index, tags } = article
-    const { handleMenuItemClick, handleScorll, contentSwiper, menuSwiper } = this
+    const { handleMenuItemClick, handleArticleClick,
+      handleScorll, contentSwiper, menuSwiper } = this
 
     const current = article[`data${index}`]
     const { list, pagination } = current
@@ -195,7 +223,11 @@ class Article extends React.Component {
                     <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })} onScroll={handleScorll}>
                       {
                         length
-                        ? list.map((iitem, iindex) => <ListItem key={iindex} data={iitem} />)
+                        ? list.map((iitem, iindex) => <ListItem
+                          onClick={handleArticleClick.bind(null, iitem.id)}
+                          key={iindex}
+                          data={iitem}
+                        />)
                         : <div style={{ textAlign: 'center', color: '#999' }}>暂无数据</div>
                       }
                       <div className={styles.listFooter}>

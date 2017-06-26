@@ -1,6 +1,5 @@
 import config from './config'
 import request from './request'
-import listViewProps from './listViewProps'
 
 // 日期格式化
 Date.prototype.format = function (format) {
@@ -28,5 +27,4 @@ Date.prototype.format = function (format) {
 module.exports = {
   config,
   request,
-  listViewProps,
 }

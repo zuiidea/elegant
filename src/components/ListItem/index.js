@@ -1,11 +1,10 @@
 import React from 'react'
-import { Link } from 'dva/router'
 import styles from './index.less'
 
-const ListItem = ({ data }) => {
-  const { title, summary, banner, createTime, id } = data
+const ListItem = ({ data, ...other }) => {
+  const { title, summary, banner, createTime } = data
   return (
-    <Link to={`/article/${id}`} className={styles.item}>
+    <section className={styles.item} {...other}>
       <div className={styles.main}>
         {banner && <img className={styles.banner} src={banner} />}
         <div className={styles.maintext}>
@@ -14,7 +13,7 @@ const ListItem = ({ data }) => {
         </div>
       </div>
       <div className={styles.date}>{createTime}</div>
-    </Link>
+    </section>
   )
 }
 

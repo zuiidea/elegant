@@ -112,5 +112,4 @@
     }
     return val
   }
-  
 }(window, window.lib || (window.lib = {})))

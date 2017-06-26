@@ -15,6 +15,7 @@ const articleModel = modelExtend(model, {
   state: {
     tags,
     index: 0,
+    scrollTops: [],
   },
 
   subscriptions: {

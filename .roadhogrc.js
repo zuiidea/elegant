@@ -22,7 +22,6 @@ export default {
       extraBabelPlugins: [
         'dva-hmr',
         'transform-runtime',
-        ['import', { 'libraryName': 'antd-mobile', 'libraryDirectory': 'lib', 'style': true }]
       ],
       extraPostCSSPlugins: [
         pxtorem({
@@ -34,7 +33,6 @@ export default {
     production: {
       extraBabelPlugins: [
         'transform-runtime',
-        ['import', { 'libraryName': 'antd-mobile', 'libraryDirectory': 'lib', 'style': true }]
       ],
       extraPostCSSPlugins: [
         pxtorem({
