@@ -2,7 +2,6 @@ const path = require('path');
 const pxtorem = require('postcss-pxtorem');
 
 const svgSpriteDirs = [
-  require.resolve('antd-mobile').replace(/warn\.js$/, ''),
   path.resolve(__dirname, 'src/svg/'),
 ];
 

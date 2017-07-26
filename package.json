@@ -38,6 +38,6 @@
     "less-vars-to-js": "^1.1.2",
     "postcss-pxtorem": "^4.0.0",
     "redbox-react": "^1.4.2",
-    "roadhog": "^0.6.0-beta.6"
+    "roadhog": "^1.0.0-beta.7"
   }
 }
