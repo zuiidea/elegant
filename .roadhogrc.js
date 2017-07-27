@@ -40,5 +40,15 @@ export default {
         }),
       ],
     }
-  }
+  },
+  "dllPlugin": {
+   "exclude": [
+     "babel-runtime"
+   ],
+   "include": [
+     "dva/router",
+     "dva/saga",
+     "dva/fetch"
+   ]
+ }
 }

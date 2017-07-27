@@ -7,6 +7,7 @@ module.exports = (webpackConfig) => {
     utils: `${__dirname}/src/utils`,
     services: `${__dirname}/src/services`,
     models: `${__dirname}/src/models`,
+    enums: `${__dirname}/src/utils/enums`,
   }
 
   return webpackConfig
