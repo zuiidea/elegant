@@ -35,11 +35,14 @@ module.exports = (webpackConfig, env) => {
       title: 'sube',
       inject: false,
       appMountId: 'root',
-      template: `!!ejs!${HtmlWebpackTemplate}`,
+      template: `!!ejs-loader!${HtmlWebpackTemplate}`,
       filename: env === 'production' ? '../index.html' : 'index.html',
       minify: {
         collapseWhitespace: true,
       },
+      scripts: env === 'production' ? null : [
+        'roadhog.dll.js',
+      ],
       links: [
         'https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css',
       ],

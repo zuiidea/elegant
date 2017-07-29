@@ -30,5 +30,9 @@ export default {
       extraBabelPlugins: ['transform-runtime'],
       extraPostCSSPlugins: [pxtorem({rootValue: 75, propWhiteList: []})]
     }
+  },
+  dllPlugin : {
+    exclude: ["babel-runtime"],
+    include: ["dva/router", "dva/saga", "dva/fetch"]
   }
 }
