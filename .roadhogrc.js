@@ -8,7 +8,7 @@ export default {
   entry : 'src/index.js',
   svgSpriteLoaderDirs : svgSpriteDirs,
   publicPath : `/${version}/`,
-  outputPath : `./dist/${version}/`,
+  outputPath : `./dist/${version}`,
   theme : "./theme.config.js",
   proxy : {
     "/api": {

@@ -1,0 +1,246 @@
+{
+  "bail": true,
+  "devtool": false,
+  "entry": {
+    "index": [".\\src/index.js"]
+  },
+  "output": {
+    "path": "c:\\web\\sube\\dist\\1.0.2",
+    "filename": "[name].js",
+    "publicPath": "/1.0.2/",
+    "libraryTarget": "var",
+    "chunkFilename": "[name].[hash].js"
+  },
+  "resolve": {
+    "modules": ["c:\\web\\sube\\node_modules\\.1.0.0-beta.7@roadhog\\node_modules", "c:\\web\\sube\\node_modules"],
+    "extensions": [".web.js", ".web.jsx", ".web.ts", ".web.tsx", ".js", ".json", ".jsx", ".ts", ".tsx"],
+    "alias": {
+      "components": "c:\\web\\sube/src/components",
+      "utils": "c:\\web\\sube/src/utils",
+      "services": "c:\\web\\sube/src/services",
+      "models": "c:\\web\\sube/src/models",
+      "enums": "c:\\web\\sube/src/utils/enums"
+    }
+  },
+  "resolveLoader": {
+    "modules": ["c:\\web\\sube\\node_modules\\.1.0.0-beta.7@roadhog\\node_modules", "c:\\web\\sube\\node_modules"],
+    "moduleExtensions": ["-loader"]
+  },
+  "module": {
+    "rules": [{
+      "exclude": [{}, {}, {}, {}, {}, {}],
+      "loader": "url",
+      "options": {
+        "limit": 10000,
+        "name": "static/[name].[hash:8].[ext]"
+      }
+    }, {
+      "test": {},
+      "include": "c:\\web\\sube\\src",
+      "loader": "babel",
+      "options": {
+        "babelrc": false,
+        "presets": ["c:\\web\\sube\\node_modules\\.6.24.1@babel-preset-es2015\\lib\\index.js", "c:\\web\\sube\\node_modules\\.6.24.1@babel-preset-react\\lib\\index.js", "c:\\web\\sube\\node_modules\\.6.24.1@babel-preset-stage-0\\lib\\index.js"],
+        "plugins": ["c:\\web\\sube\\node_modules\\.0.2.1@babel-plugin-add-module-exports\\lib\\index.js", "c:\\web\\sube\\node_modules\\.3.0.0@babel-plugin-react-require\\lib\\index.js", "transform-runtime"],
+        "cacheDirectory": true
+      }
+    }, {
+      "test": {},
+      "include": "c:\\web\\sube\\src",
+      "use": [{
+        "loader": "c:\\web\\sube\\node_modules\\.2.1.2@extract-text-webpack-plugin\\loader.js",
+        "options": {
+          "omit": 1,
+          "remove": true
+        }
+      }, {
+        "loader": "style"
+      }, {
+        "loader": "css",
+        "options": {
+          "importLoaders": 1,
+          "sourceMap": true,
+          "modules": true,
+          "localIdentName": "[local]___[hash:base64:5]"
+        }
+      }, {
+        "loader": "postcss"
+      }]
+    }, {
+      "test": {},
+      "include": "c:\\web\\sube\\src",
+      "use": [{
+        "loader": "c:\\web\\sube\\node_modules\\.2.1.2@extract-text-webpack-plugin\\loader.js",
+        "options": {
+          "omit": 1,
+          "remove": true
+        }
+      }, {
+        "loader": "style"
+      }, {
+        "loader": "css",
+        "options": {
+          "importLoaders": 1,
+          "sourceMap": true,
+          "modules": true,
+          "localIdentName": "[local]___[hash:base64:5]"
+        }
+      }, {
+        "loader": "postcss"
+      }, {
+        "loader": "less",
+        "options": {
+          "modifyVars": {
+            "@brand-primary": "#000"
+          }
+        }
+      }]
+    }, {
+      "test": {},
+      "include": "c:\\web\\sube\\node_modules",
+      "use": [{
+        "loader": "c:\\web\\sube\\node_modules\\.2.1.2@extract-text-webpack-plugin\\loader.js",
+        "options": {
+          "omit": 1,
+          "remove": true
+        }
+      }, {
+        "loader": "style"
+      }, {
+        "loader": "css",
+        "options": {
+          "importLoaders": 1,
+          "sourceMap": true
+        }
+      }, {
+        "loader": "postcss"
+      }]
+    }, {
+      "test": {},
+      "include": "c:\\web\\sube\\node_modules",
+      "use": [{
+        "loader": "c:\\web\\sube\\node_modules\\.2.1.2@extract-text-webpack-plugin\\loader.js",
+        "options": {
+          "omit": 1,
+          "remove": true
+        }
+      }, {
+        "loader": "style"
+      }, {
+        "loader": "css",
+        "options": {
+          "importLoaders": 1,
+          "sourceMap": true
+        }
+      }, {
+        "loader": "postcss"
+      }, {
+        "loader": "less",
+        "options": {
+          "modifyVars": {
+            "@brand-primary": "#000"
+          }
+        }
+      }]
+    }, {
+      "test": {},
+      "loader": "file",
+      "options": {
+        "name": "[name].[ext]"
+      }
+    }, {
+      "test": {},
+      "include": "c:\\web\\sube\\src",
+      "use": [{
+        "loader": "babel",
+        "options": {
+          "babelrc": false,
+          "presets": ["c:\\web\\sube\\node_modules\\.6.24.1@babel-preset-es2015\\lib\\index.js", "c:\\web\\sube\\node_modules\\.6.24.1@babel-preset-react\\lib\\index.js", "c:\\web\\sube\\node_modules\\.6.24.1@babel-preset-stage-0\\lib\\index.js"],
+          "plugins": ["c:\\web\\sube\\node_modules\\.0.2.1@babel-plugin-add-module-exports\\lib\\index.js", "c:\\web\\sube\\node_modules\\.3.0.0@babel-plugin-react-require\\lib\\index.js", "transform-runtime"],
+          "cacheDirectory": true
+        }
+      }, {
+        "loader": "awesome-typescript",
+        "options": {
+          "transpileOnly": true
+        }
+      }]
+    }, {
+      "test": {},
+      "loader": "file",
+      "options": {
+        "name": "static/[name].[hash:8].[ext]"
+      },
+      "exclude": ["c:\\web\\sube\\src\\svg"]
+    }, {
+      "test": {},
+      "loader": "svg-sprite",
+      "include": ["c:\\web\\sube\\src\\svg"]
+    }]
+  },
+  "plugins": [{}, {}, {
+    "filename": "[name].css",
+    "id": 1,
+    "options": {}
+  }, {
+    "definitions": {
+      "process.env": {
+        "NODE_ENV": "\"production\""
+      }
+    }
+  }, {
+    "options": {
+      "options": {
+        "context": "c:\\web\\sube\\node_modules\\.1.0.0-beta.7@roadhog\\lib\\config",
+        "postcss": [null, null]
+      },
+      "test": {}
+    }
+  }, {
+    "options": {
+      "compress": {
+        "screw_ie8": true,
+        "warnings": false
+      },
+      "mangle": {
+        "screw_ie8": true
+      },
+      "output": {
+        "comments": false,
+        "screw_ie8": true,
+        "ascii_only": true
+      }
+    }
+  }, {
+    "options": {
+      "template": "!!ejs-loader!c:\\web\\sube\\node_modules\\.5.6.0@html-webpack-template\\index.ejs",
+      "filename": "../index.html",
+      "hash": true,
+      "inject": false,
+      "compile": true,
+      "favicon": false,
+      "minify": {
+        "collapseWhitespace": true
+      },
+      "cache": true,
+      "showErrors": true,
+      "chunks": "all",
+      "excludeChunks": [],
+      "title": "sube",
+      "xhtml": false,
+      "mobile": true,
+      "appMountId": "root",
+      "scripts": null,
+      "links": ["https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css"],
+      "meta": [{
+        "name": "description",
+        "content": "An article List."
+      }]
+    }
+  }, {}],
+  "node": {
+    "fs": "empty",
+    "net": "empty",
+    "tls": "empty"
+  }
+}

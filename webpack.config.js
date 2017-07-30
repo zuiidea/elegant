@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackTemplate = require('html-webpack-template')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = (webpackConfig, env) => {
   // FilenameHash
@@ -53,6 +54,10 @@ module.exports = (webpackConfig, env) => {
         },
       ],
     }),
+    new CopyWebpackPlugin([{
+      from: 'src/public',
+      to: env === 'production' ? '../' : webpackConfig.output.outputPath,
+    }]),
   ])
 
   return webpackConfig
