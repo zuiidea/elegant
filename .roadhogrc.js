@@ -11,14 +11,22 @@ export default {
   outputPath : `./dist/${version}`,
   theme : "./theme.config.js",
   proxy : {
-    "/api": {
+    "/api/sspai": {
       "target": "https://sspai.com",
       changeOrigin: true,
       pathRewrite: {
-        "^/api/v1": "/api/v1"
+        "^/api/sspai": "/api/v1"
+      }
+    },
+    "/api/36kr": {
+      "target": "https://flipboard.com",
+      changeOrigin: true,
+      pathRewrite: {
+        "^/api/36kr": "/api/users/updateFeed"
       }
     }
   },
+
   env : {
     development: {
       extraBabelPlugins: [

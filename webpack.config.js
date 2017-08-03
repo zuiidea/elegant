@@ -29,36 +29,49 @@ module.exports = (webpackConfig, env) => {
     enums: `${__dirname}/src/utils/enums`,
   }
 
-  webpackConfig.plugins = webpackConfig.plugins.concat([
-    new HtmlWebpackPlugin({
-      hash: true,
-      mobile: true,
-      title: 'sube',
-      inject: false,
-      appMountId: 'root',
-      template: `!!ejs-loader!${HtmlWebpackTemplate}`,
-      filename: env === 'production' ? '../index.html' : 'index.html',
-      minify: {
-        collapseWhitespace: true,
+  const htmlProps = {
+    hash: true,
+    mobile: true,
+    title: 'sube',
+    inject: false,
+    appMountId: 'root',
+    template: `!!ejs-loader!${HtmlWebpackTemplate}`,
+    minify: {
+      collapseWhitespace: true,
+    },
+    scripts: env === 'production' ? null : [
+      '/roadhog.dll.js',
+    ],
+    links: [
+      'https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css',
+    ],
+    meta: [
+      {
+        name: 'description',
+        content: 'An article List.',
       },
-      scripts: env === 'production' ? null : [
-        'roadhog.dll.js',
-      ],
-      links: [
-        'https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css',
-      ],
-      meta: [
-        {
-          name: 'description',
-          content: 'An article List.',
-        },
-      ],
-    }),
+    ],
+  }
+
+  webpackConfig.plugins = webpackConfig.plugins.concat([
     new CopyWebpackPlugin([{
       from: 'src/public',
       to: env === 'production' ? '../' : webpackConfig.output.outputPath,
     }]),
+    new HtmlWebpackPlugin({
+      ...htmlProps,
+      filename: env === 'production' ? '../index.html' : 'index.html',
+    }),
   ])
+
+  if (env === 'production') {
+    webpackConfig.plugins.push(
+      new HtmlWebpackPlugin({
+        ...htmlProps,
+        filename: 'index.html',
+      })
+    )
+  }
 
   return webpackConfig
 }

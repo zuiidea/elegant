@@ -1,33 +1,58 @@
 import modelExtend from 'dva-model-extend'
 import { model } from 'models'
 import { articles } from 'services'
+import pathToRegexp from 'path-to-regexp'
+import { EnumPlatform } from 'enums'
 
 const { query } = articles
-
-const tags = [
-  '效率工具', '手机摄影', '生活方式',
-  '游戏', '硬件', '人物',
-]
 
 const articleModel = modelExtend(model, {
   namespace: 'article',
 
   state: {
-    tags,
+    tags: [],
     index: 0,
+    platform: '',
     scrollTops: [],
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/' || location.pathname === '/article') {
-          const tag = location.query.tag || tags[0]
+        const { pathname, query } = location
+        const match = pathToRegexp('/platform/:platform').exec(pathname)
+        if (pathToRegexp('/platform/:platform').exec(pathname)) {
+          const platform = match[1]
+          const tags = EnumPlatform[platform].tags
+          const tag = query.tag || tags[0]
+          const initData = {}
+          tags.forEach((item, index) => {
+            initData[`data${index}`] = {
+              list: [],
+              pagination: {
+                limit: 10,
+                offset: 0,
+                total: 0,
+              },
+            }
+          })
+
+          dispatch({
+            type: 'updateState',
+            payload: {
+              tags,
+              platform,
+              ...initData,
+            },
+          })
+
           dispatch({
             type: 'preQuery',
             payload: {
               tag,
-              index: tags.indexOf(tag),
+              tags,
+              platform,
+              index: EnumPlatform[platform].tags.indexOf(tag),
             },
           })
         }
@@ -39,19 +64,23 @@ const articleModel = modelExtend(model, {
     *preQuery({
       payload = {},
     }, { put, select }) {
+      const { tags, tag, index } = payload
       const state = yield select(item => item.article)
-      if (state[`data${payload.index}`].list.length) {
+      if (state[`data${index}`].list.length) {
         return
       }
+
       yield put({
-        type: `query${payload.index}`,
+        type: 'query',
         payload,
       })
+
       for (let i = 0; i < tags.length; i += 1) {
-        if (tags[i] !== payload.tag) {
+        if (tags[i] !== tag) {
           yield put({
-            type: `query${i}`,
+            type: 'query',
             payload: {
+              ...payload,
               tag: tags[i],
               index: i,
             },
@@ -62,21 +91,17 @@ const articleModel = modelExtend(model, {
     *query({
       payload = {},
     }, { call, put, select }) {
-      const { tag, index } = payload
+      const { tag, index, platform } = payload
       const { limit = 10, offset = 0 } = payload
-      const result = yield call(query, { tag, limit, offset })
+      const result = yield call(query, { tag, limit, offset, platform })
       const { success, data } = result
 
       if (success) {
         const state = yield select(item => item.article)
         const { list } = state[`data${index}`]
         const { total } = data
-        const newData = (offset === 0 ? [] : list).concat(data.list.map(item => ({
-          id: item.id,
-          summary: item.summary,
-          title: item.title,
-          banner: item.banner ? `https://cdn.sspai.com/${item.banner}?imageMogr2/quality/95/thumbnail/!360x220r/gravity/Center/crop/360x260` : '',
-        })))
+        const newData = (offset === 0 ? [] : list)
+        .concat(data.list.map(EnumPlatform[platform].handleData))
 
         yield put({ type: 'updateState',
           payload: {
@@ -99,24 +124,24 @@ const articleModel = modelExtend(model, {
 })
 
 
-tags.forEach((item, index) => {
-  articleModel.state[`data${index}`] = {
-    list: [],
-    pagination: {
-      limit: 10,
-      offset: 0,
-      total: 0,
-    },
-  }
-
-  articleModel.effects[`query${index}`] = function *({
-    payload = {},
-  }, { put }) {
-    yield put({
-      type: 'query',
-      payload,
-    })
-  }
-})
+// Array.from({ length: 10 }).forEach((item, index) => {
+//   articleModel.state[`data${index}`] = {
+//     list: [],
+//     pagination: {
+//       limit: 10,
+//       offset: 0,
+//       total: 0,
+//     },
+//   }
+//
+//   articleModel.effects[`query${index}`] = function *({
+//     payload = {},
+//   }, { put }) {
+//     yield put({
+//       type: 'query',
+//       payload,
+//     })
+//   }
+// })
 
 export default articleModel

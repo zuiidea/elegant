@@ -17,12 +17,21 @@ const Routers = ({ history, app }) => {
       getIndexRoute(nextState, cb) {
         require.ensure([], (require) => {
           registerModel(app, require('./models/article/'))
-          cb(null, { component: require('./routes/article/') })
+          cb(null, require('./routes/article/'))
         }, 'article')
       },
       childRoutes: [
         {
-          path: 'article/:id',
+          path: '/platform/:platform',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/article/'))
+              cb(null, require('./routes/article/'))
+            }, 'article')
+          },
+        },
+        {
+          path: '/platform/:platform/article/:id',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('./models/article/detail'))
