@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Router } from 'dva/router'
-import App from './routes/app'
+import App from 'routes/app'
 
 const registerModel = (app, model) => {
   if (!(app._models.filter(m => m.namespace === model.namespace).length === 1)) {
@@ -14,19 +14,20 @@ const Routers = ({ history, app }) => {
     {
       path: '/',
       component: App,
-      getIndexRoute(nextState, cb) {
-        require.ensure([], (require) => {
-          registerModel(app, require('./models/article/'))
-          cb(null, require('./routes/article/'))
-        }, 'article')
+      indexRoute: {
+        getComponent(nextState, cb) {
+          require.ensure([], (require) => {
+            cb(null, require('routes/index/'))
+          }, 'index')
+        },
       },
       childRoutes: [
         {
           path: '/platform/:platform',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              registerModel(app, require('./models/article/'))
-              cb(null, require('./routes/article/'))
+              registerModel(app, require('models/article/'))
+              cb(null, require('routes/article/'))
             }, 'article')
           },
         },
@@ -34,8 +35,8 @@ const Routers = ({ history, app }) => {
           path: '/platform/:platform/article/:id',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              registerModel(app, require('./models/article/detail'))
-              cb(null, require('./routes/article/detail'))
+              registerModel(app, require('models/article/detail'))
+              cb(null, require('routes/article/detail'))
             }, 'article-detail')
           },
         },

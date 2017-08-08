@@ -27,6 +27,8 @@ module.exports = (webpackConfig, env) => {
     services: `${__dirname}/src/services`,
     models: `${__dirname}/src/models`,
     enums: `${__dirname}/src/utils/enums`,
+    routes: `${__dirname}/src/routes`,
+    assets: `${__dirname}/src/assets`,
   }
 
   const htmlProps = {
