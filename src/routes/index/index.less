@@ -1,0 +1,29 @@
+.iconList {
+  padding: 64px;
+
+  .iconItem {
+    width: 100px;
+    text-align: center;
+    display: block;
+    opacity: 1s;
+    transition: opacity 0.3s ease;
+
+    &:active {
+      opacity: 0.8;
+    }
+
+    & + .iconItem {
+      margin-left: 44px;
+    }
+  }
+
+  .iconImage {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .iconName {
+    margin-top: 8px;
+    color: #666;
+  }
+}

@@ -17,12 +17,13 @@ export default modelExtend(model, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const match = pathToRegexp('/article/:id').exec(location.pathname)
+        const match = pathToRegexp('/platform/:platform/article/:id').exec(location.pathname)
         if (match) {
           dispatch({
             type: 'preQuery',
             payload: {
-              id: match[1],
+              platform: match[1],
+              id: match[2],
             },
           })
         }

@@ -8,17 +8,18 @@ export default {
   entry : 'src/index.js',
   svgSpriteLoaderDirs : svgSpriteDirs,
   publicPath : `/${version}/`,
-  outputPath : `./dist/${version}/`,
+  outputPath : `./dist/${version}`,
   theme : "./theme.config.js",
   proxy : {
-    "/api": {
+    "/api/sspai": {
       "target": "https://sspai.com",
       changeOrigin: true,
       pathRewrite: {
-        "^/api/v1": "/api/v1"
+        "^/api/sspai": "/api/v1"
       }
     }
   },
+
   env : {
     development: {
       extraBabelPlugins: [

@@ -58,6 +58,7 @@ class Article extends React.Component {
       touchRatio: 0.6,
       speed: 300,
       onSlideChangeStart: (swiper) => {
+        this.menuSwiper.update()
         dispatch({
           type: 'article/updateState',
           payload: {
@@ -76,6 +77,7 @@ class Article extends React.Component {
     const { dispatch } = this.props
     const { menuSwiper } = this
     if (menuSwiper) {
+      menuSwiper.update()
       menuSwiper.wrapper.css('transition-duration', '500ms')
     }
     dispatch({
@@ -89,7 +91,7 @@ class Article extends React.Component {
   handleScorll = (e) => {
     const { scrollHeight, scrollTop, clientHeight } = e.target
     const { article, loading, dispatch } = this.props
-    const { index, tags } = article
+    const { index, tags, platform } = article
     const data = article[`data${index}`]
     const { pagination, list } = data
     const { limit, offset, total } = pagination
@@ -118,11 +120,12 @@ class Article extends React.Component {
           },
         })
         dispatch({
-          type: `article/query${index}`,
+          type: 'article/query',
           payload: {
             offset: offset + limit,
-            limit,
             tag: tags[index],
+            platform,
+            limit,
             index,
           },
         })
@@ -133,7 +136,8 @@ class Article extends React.Component {
 
   handleArticleClick = (id) => {
     const { contentSwiper } = this
-    const { dispatch } = this.props
+    const { dispatch, article } = this.props
+    const { platform } = article
     const scrollTops = []
     if (contentSwiper) {
       contentSwiper.slides.each((index, item) => {
@@ -147,7 +151,7 @@ class Article extends React.Component {
       },
     })
     dispatch(routerRedux.push({
-      pathname: `/article/${id}`,
+      pathname: `/platform/${platform}/article/${id}`,
     }))
   }
 
@@ -228,20 +232,27 @@ class Article extends React.Component {
                           key={iindex}
                           data={iitem}
                         />)
-                        : <div style={{ textAlign: 'center', color: '#999' }}>暂无数据</div>
+                        : <div className={styles.noContent}>
+                          暂无数据
+                        </div>
                       }
-                      <div className={styles.listFooter}>
-                        {
-                          (length + limit < total && length > 9)
-                          ? <div className={styles.listFooterLoading}>
-                            <CircularProgress color="#000" size={20} thickness={2} />
-                            <div className={styles.listFooterText}>加载中...</div>
-                          </div>
-                          : <div className={styles.listFooterLoaded}>
-                            已加载到底部
-                          </div>
-                        }
-                      </div>
+                      {
+                        length
+                        ? <div className={styles.listFooter}>
+                          {
+                              (length + limit < total && length > 9)
+                              ? <div className={styles.listFooterLoading}>
+                                <CircularProgress color="#000" size={20} thickness={2} />
+                                <div className={styles.listFooterText}>加载中...</div>
+                              </div>
+                              : <div className={styles.listFooterLoaded}>
+                                已加载到底部
+                              </div>
+                            }
+                        </div>
+                        : ''
+                      }
+
                     </div>
                   ))
                 }
@@ -252,6 +263,7 @@ class Article extends React.Component {
       </MuiThemeProvider>
     )
   }
+
 }
 
 
