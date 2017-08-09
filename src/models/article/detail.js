@@ -19,10 +19,19 @@ export default modelExtend(model, {
       history.listen((location) => {
         const match = pathToRegexp('/platform/:platform/article/:id').exec(location.pathname)
         if (match) {
+          const platform = match[1]
+
+          dispatch({
+            type: 'updateState',
+            payload: {
+              platform,
+            },
+          })
+
           dispatch({
             type: 'preQuery',
             payload: {
-              platform: match[1],
+              platform,
               id: match[2],
             },
           })
@@ -36,7 +45,6 @@ export default modelExtend(model, {
       payload,
     }, { put, select }) {
       const { current } = yield select(_ => _.articleDetail)
-      console.log(current, payload.id)
       if (current !== payload.id) {
         window.scrollTo(0, 0)
         yield put({

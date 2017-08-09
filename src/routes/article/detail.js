@@ -25,7 +25,9 @@ const overlayStyle = {
 }
 
 const Detail = ({ articleDetail, loading }) => {
-  const { title, body, createTime } = articleDetail
+  const { title, body, createTime, platform } = articleDetail
+  const currentPlatform = EnumPlatform[platform] || {}
+  const { link } = currentPlatform
   return (
     <MuiThemeProvider>
       <article className={styles.detail}>
@@ -48,7 +50,7 @@ const Detail = ({ articleDetail, loading }) => {
             />
           </Link>
           <p>
-            版权所有<a href="https://sspai.com/">©少数派</a>
+            版权所有<a href={link}>©{currentPlatform.title}</a>
           </p>
         </div>
       </article>
