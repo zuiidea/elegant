@@ -3,6 +3,8 @@ const sspaiIcon = require('assets/sspai.com.png')
 const platformList = [
   {
     name: 'sspai',
+    title: '少数派',
+    link: 'https://sspai.com',
     handleData: item => ({
       id: item.id,
       summary: item.summary,

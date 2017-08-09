@@ -1,0 +1,41 @@
+.iconList___qG53u {
+  padding: 0.85333rem;
+}
+.iconList___qG53u .iconItem___36lil {
+  width: 1.33333rem;
+  text-align: center;
+  display: block;
+  opacity: 1s;
+  -webkit-transition: opacity 0.3s ease;
+  -o-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+}
+.iconList___qG53u .iconItem___36lil:active {
+  opacity: 0.8;
+}
+.iconList___qG53u .iconItem___36lil + .iconItem___36lil {
+  margin-left: 0.58667rem;
+}
+.iconList___qG53u .iconImage___3BKGV {
+  width: 100%;
+  border-radius: 0.10667rem;
+}
+.iconList___qG53u .iconName___2k0OI {
+  margin-top: 0.10667rem;
+  color: #666;
+}
+blockquote,
+body,
+figure {
+  margin: 0;
+}
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -moz-tap-highlight-color: rgba(0, 0, 0, 0);
+  -ms-tap-highlight-color: rgba(0, 0, 0, 0);
+  -o-tap-highlight-color: rgba(0, 0, 0, 0);
+  tap-highlight-color: rgba(0, 0, 0, 0);
+}
+a:-webkit-any-link {
+  text-decoration: none;
+}

@@ -17,13 +17,6 @@ export default {
       pathRewrite: {
         "^/api/sspai": "/api/v1"
       }
-    },
-    "/api/36kr": {
-      "target": "https://flipboard.com",
-      changeOrigin: true,
-      pathRewrite: {
-        "^/api/36kr": "/api/users/updateFeed"
-      }
     }
   },
 

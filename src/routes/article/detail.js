@@ -4,6 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import RaisedButton from 'material-ui/RaisedButton'
 import { Loader } from 'components'
 import { Link } from 'dva/router'
+import { EnumPlatform } from 'enums'
 import styles from './detail.less'
 
 const RaisedButtonStyle = {

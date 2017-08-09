@@ -4,7 +4,7 @@ const beautify = require('js-beautify').js_beautify
 const config = require('./package.json')
 
 const dist = path.join(`${__dirname}/dist`)
-const maxVersion = 5
+const maxVersion = 2
 
 const writeVersion = () => new Promise((resolve, reject) => {
   const { version } = config

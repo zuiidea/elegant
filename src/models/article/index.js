@@ -19,9 +19,9 @@ const articleModel = modelExtend(model, {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const { pathname, query } = location
+        const { pathname } = location
         const match = pathToRegexp('/platform/:platform').exec(pathname)
-        if (pathToRegexp('/platform/:platform').exec(pathname)) {
+        if (match) {
           const platform = match[1]
           const tags = EnumPlatform[platform].tags
           const tag = query.tag || tags[0]

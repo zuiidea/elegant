@@ -136,7 +136,8 @@ class Article extends React.Component {
 
   handleArticleClick = (id) => {
     const { contentSwiper } = this
-    const { dispatch } = this.props
+    const { dispatch, article } = this.props
+    const { platform } = article
     const scrollTops = []
     if (contentSwiper) {
       contentSwiper.slides.each((index, item) => {
@@ -150,7 +151,7 @@ class Article extends React.Component {
       },
     })
     dispatch(routerRedux.push({
-      pathname: `/article/${id}`,
+      pathname: `/platform/${platform}/article/${id}`,
     }))
   }
 
