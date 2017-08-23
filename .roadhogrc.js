@@ -11,11 +11,11 @@ export default {
   outputPath : `./dist/${version}`,
   theme : "./theme.config.js",
   proxy : {
-    "/api/sspai": {
-      "target": "https://sspai.com",
+    "/api": {
+      "target": "http://api.sube.zuiidea.com",
       changeOrigin: true,
       pathRewrite: {
-        "^/api/sspai": "/api/v1"
+        "^/api": "/"
       }
     }
   },
