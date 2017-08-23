@@ -101,7 +101,7 @@ const articleModel = modelExtend(model, {
         const { list } = state[`data${index}`]
         const { total } = data
         const newData = (offset === 0 ? [] : list)
-        .concat(data.list.map(EnumPlatform[platform].handleData))
+        .concat(data.list)
 
         yield put({ type: 'updateState',
           payload: {
@@ -122,26 +122,5 @@ const articleModel = modelExtend(model, {
     },
   },
 })
-
-
-// Array.from({ length: 10 }).forEach((item, index) => {
-//   articleModel.state[`data${index}`] = {
-//     list: [],
-//     pagination: {
-//       limit: 10,
-//       offset: 0,
-//       total: 0,
-//     },
-//   }
-//
-//   articleModel.effects[`query${index}`] = function *({
-//     payload = {},
-//   }, { put }) {
-//     yield put({
-//       type: 'query',
-//       payload,
-//     })
-//   }
-// })
 
 export default articleModel

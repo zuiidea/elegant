@@ -4,7 +4,7 @@ const { APIV1 } = config
 
 export async function query(params) {
   return request({
-    url: `${APIV1}/:platform/articles/:id`,
+    url: `${APIV1}/platform/:platform/article/:id`,
     method: 'get',
     data: params,
   })

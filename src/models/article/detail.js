@@ -60,15 +60,9 @@ export default modelExtend(model, {
       const result = yield call(query, payload)
       const { success, data } = result
       if (success) {
-        const { title, body, created_at } = data
         yield put({
           type: 'updateState',
-          payload: {
-            title,
-            body,
-            current: payload.id,
-            createTime: new Date(created_at).format('MM月dd日 hh:mm'),
-          },
+          payload: data,
         })
       } else {
         result.type = 'queryArticle'
