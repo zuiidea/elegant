@@ -1,4 +1,6 @@
 const sspaiIcon = require('assets/sspai.com.png')
+const oneIcon = require('assets/wufazhuce.com.jpg')
+
 
 const platformList = [
   {
@@ -13,6 +15,18 @@ const platformList = [
       '游戏',
       '硬件',
       '人物',
+    ],
+  },
+  {
+    name: 'one',
+    title: '一个',
+    link: 'http://wufazhuce.com/',
+    icon: oneIcon,
+    tags: [
+      '首页',
+      // '阅读',
+      // '音乐',
+      // '图片',
     ],
   },
 ]

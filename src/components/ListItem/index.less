@@ -13,6 +13,7 @@
   .main {
     line-height: 1.8;
     position: relative;
+    overflow: hidden;
   }
 
   .maintext {
@@ -46,7 +47,8 @@
 
   & + .item {
     .hairline(top, #ddd);
-    &::before{
+
+    &::before {
       width: auto;
       left: 32px;
       right: 32px;

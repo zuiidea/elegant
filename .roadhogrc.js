@@ -12,7 +12,8 @@ export default {
   theme : "./theme.config.js",
   proxy : {
     "/api": {
-      "target": "http://api.sube.zuiidea.com",
+      // "target": "http://api.sube.zuiidea.com",
+      "target": "http://localhost:4000/api/v1",
       changeOrigin: true,
       pathRewrite: {
         "^/api": "/"

@@ -1,6 +1,6 @@
 {
   "name": "sube",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": true,
   "scripts": {
     "dev": "set BROWSER=none&&set HOST=0.0.0.0&&set PORT=8080&&roadhog server",

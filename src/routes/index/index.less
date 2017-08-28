@@ -1,5 +1,6 @@
 .iconList {
   padding: 64px;
+  display: flex;
 
   .iconItem {
     width: 100px;
@@ -9,7 +10,7 @@
     transition: opacity 0.3s ease;
 
     &:active {
-      opacity: 0.8;
+      opacity: 0.6;
     }
 
     & + .iconItem {
@@ -19,7 +20,8 @@
 
   .iconImage {
     width: 100%;
-    border-radius: 8px;
+    border: solid 1PX #eee;
+    border-radius: 50%;
   }
 
   .iconName {
