@@ -1,5 +1,6 @@
 const sspaiIcon = require('assets/sspai.com.png')
-const oneIcon = require('assets/wufazhuce.com.jpg')
+// const oneIcon = require('assets/wufazhuce.com.jpg')
+const yixiIcon = require('assets/yixi.tv.png')
 
 
 const platformList = [
@@ -17,16 +18,22 @@ const platformList = [
       '人物',
     ],
   },
+  // {
+  //   name: 'one',
+  //   title: '一个',
+  //   link: 'http://wufazhuce.com',
+  //   icon: oneIcon,
+  //   tags: [
+  //     '热门',
+  //   ],
+  // },
   {
-    name: 'one',
+    name: 'yixi',
     title: '一个',
-    link: 'http://wufazhuce.com/',
-    icon: oneIcon,
+    link: 'http://yixi.tv',
+    icon: yixiIcon,
     tags: [
-      '首页',
-      // '阅读',
-      // '音乐',
-      // '图片',
+      '热门',
     ],
   },
 ]

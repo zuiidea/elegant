@@ -6,6 +6,20 @@
   width: 100%;
   height: 100vh;
   max-width: 750px;
+
+  &.menuContainerHide {
+    .menuContainer {
+      display: none;
+    }
+
+    .contentContainer {
+      top: 0;
+
+      .contentSlide {
+        height: 100vh;
+      }
+    }
+  }
 }
 
 .noContent {
