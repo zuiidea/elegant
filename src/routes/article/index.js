@@ -192,7 +192,7 @@ class Article extends React.Component {
 
     return (
       <MuiThemeProvider>
-        <div className={styles.home}>
+        <div className={classnames(styles.home, { [styles.menuContainerHide]: tags.length < 2 })}>
           <Loader
             spinning={loading.effects['article/query'] && offset === 0 && length === 0}
           />

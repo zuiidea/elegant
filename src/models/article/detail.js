@@ -62,7 +62,10 @@ export default modelExtend(model, {
       if (success) {
         yield put({
           type: 'updateState',
-          payload: data,
+          payload: {
+            ...data,
+            createTime: new Date(data.createTime).format('MM月dd日  hh:mm'),
+          },
         })
       } else {
         result.type = 'queryArticle'
