@@ -9,11 +9,15 @@ export default {
   svgSpriteLoaderDirs : svgSpriteDirs,
   publicPath : `/${version}/`,
   outputPath : `./dist/${version}`,
-  theme : "./theme.config.js",
+  theme : './theme.config.js',
+  extraBabelPlugins:['add-module-exports'],
+  externals: {
+    "react": "window.React",
+    "react-dom": "window.ReactDOM"
+  },
   proxy : {
     "/api": {
-      // "target": "http://api.sube.zuiidea.com",
-      "target": "http://localhost:4000/api/v1",
+      "target": "http://journal.zuiidea.com/api/v1",
       changeOrigin: true,
       pathRewrite: {
         "^/api": "/"
@@ -24,7 +28,9 @@ export default {
   env : {
     development: {
       extraBabelPlugins: [
-        'dva-hmr', 'transform-runtime'
+        'dva-hmr',
+        'transform-runtime',
+        'add-module-exports'
       ],
       extraPostCSSPlugins: [pxtorem({rootValue: 75, propWhiteList: []})]
     },

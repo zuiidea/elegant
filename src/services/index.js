@@ -1,8 +1,16 @@
-import * as article from './article/'
-import * as articles from './article/list'
+import * as article from './article'
+import * as provider from './provider'
 
+/**
+*
+list      GET     /posts
+create    POST    /post
+query     GET     /post/:id
+update    PUT     /post/:id
+remove    DELETE  /post/:id
+*/
 
-module.exports = {
+export {
+  provider,
   article,
-  articles,
 }

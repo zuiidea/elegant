@@ -1,13 +1,14 @@
 import React from 'react'
-import { platformList } from 'enums'
 import { Link } from 'dva/router'
+import { connect } from 'dva'
 import styles from './index.less'
 
-const Index = () => {
+const Index = ({ provider }) => {
+  const { list = [] } = provider
   return (
     <div>
       <div className={styles.iconList} >
-        {platformList.map((item, index) => <Link key={index} to={`/platform/${item.name}`} className={styles.iconItem}>
+        {list.map((item, index) => <Link key={index} to={`/platform/${item.name}`} className={styles.iconItem}>
           <img src={item.icon} className={styles.iconImage} />
           <div className={styles.iconName}>{item.name}</div>
         </Link>)}
@@ -16,4 +17,4 @@ const Index = () => {
   )
 }
 
-export default Index
+export default connect(({ provider }) => ({ provider }))(Index)

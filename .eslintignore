@@ -1,2 +1,2 @@
 src/**/*-test.js
-public/flexible.js
+src/utils/flexible.js

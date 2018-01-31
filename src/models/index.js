@@ -24,7 +24,7 @@ const listView = modelExtend(model, {
 
 })
 
-module.exports = {
+export {
   model,
   listView,
 }

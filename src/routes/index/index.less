@@ -1,25 +1,27 @@
 .iconList {
-  padding: 64px;
+  padding: 64px 30px;
   display: flex;
+  width: 750px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 
   .iconItem {
-    width: 100px;
     text-align: center;
     display: block;
-    opacity: 1s;
+    opacity: 1;
     transition: opacity 0.3s ease;
+    width: 25%;
+    margin-bottom: 64px;
 
     &:active {
       opacity: 0.6;
     }
-
-    & + .iconItem {
-      margin-left: 44px;
-    }
   }
 
   .iconImage {
-    width: 100%;
+    width: 100px;
+    height: 100px;
     border: solid 1PX #eee;
     border-radius: 50%;
   }
@@ -27,5 +29,6 @@
   .iconName {
     margin-top: 8px;
     color: #666;
+    font-size: 24px;
   }
 }

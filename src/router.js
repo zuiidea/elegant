@@ -1,56 +1,64 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Router } from 'dva/router'
+import { Switch, Route, routerRedux } from 'dva/router'
+import dynamic from 'dva/dynamic'
 import App from 'routes/app'
+import { article } from 'services'
 
-const registerModel = (app, model) => {
-  if (!(app._models.filter(m => m.namespace === model.namespace).length === 1)) {
-    app.model(model)
-  }
-}
+console.log(article)
 
-const Routers = ({ history, app }) => {
+const { ConnectedRouter } = routerRedux
+
+const Routers = function ({ history, app }) {
+  console.log(app)
+
   const routes = [
     {
       path: '/',
-      component: App,
-      indexRoute: {
-        getComponent(nextState, cb) {
-          require.ensure([], (require) => {
-            cb(null, require('routes/index/'))
-          }, 'index')
-        },
-      },
-      childRoutes: [
-        {
-          path: '/platform/:platform',
-          getComponent(nextState, cb) {
-            require.ensure([], (require) => {
-              registerModel(app, require('models/article/'))
-              cb(null, require('routes/article/'))
-            }, 'article')
-          },
-        },
-        {
-          path: '/platform/:platform/article/:id',
-          getComponent(nextState, cb) {
-            require.ensure([], (require) => {
-              registerModel(app, require('models/article/detail'))
-              cb(null, require('routes/article/detail'))
-            }, 'article-detail')
-          },
-        },
-      ],
+      component: () => import('./routes/index'),
+      models: () => [import('./models/provider/')],
+    }, {
+      path: '/platform/:platform',
+      models: () => [import('./models/article')],
+      component: () => import('./routes/article/'),
+    }, {
+      path: '/platform/:platform/article/:id',
+      models: () => [import('./models/article/detail')],
+      component: () => import('./routes/article/detail'),
     },
   ]
+
   return (
-    <Router history={history} routes={routes} />
+    <ConnectedRouter history={history}>
+      <App>
+        <Switch>
+          {
+            routes.map(({ path, ...dynamics }, key) => (
+              <Route
+                key={key}
+                exact
+                path={path}
+                component={dynamic({
+                  app,
+                  ...dynamics,
+                })}
+              />
+            ))
+          }
+        </Switch>
+      </App>
+    </ConnectedRouter>
   )
 }
 
 Routers.propTypes = {
   history: PropTypes.object,
   app: PropTypes.object,
+}
+
+Routers.defaultProps = {
+  history: {},
+  app: {},
 }
 
 export default Routers

@@ -41,9 +41,9 @@ module.exports = (webpackConfig, env) => {
     minify: {
       collapseWhitespace: true,
     },
-    scripts: env === 'production' ? null : [
-      '/roadhog.dll.js',
-    ],
+    // scripts: env === 'production' ? null : [
+    //   '/roadhog.dll.js',
+    // ],
     links: [
       'https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css',
     ],
@@ -71,12 +71,10 @@ module.exports = (webpackConfig, env) => {
   ])
 
   if (env === 'production') {
-    webpackConfig.plugins.push(
-      new HtmlWebpackPlugin({
-        ...htmlProps,
-        filename: 'index.html',
-      })
-    )
+    webpackConfig.plugins.push(new HtmlWebpackPlugin({
+      ...htmlProps,
+      filename: 'index.html',
+    }))
   }
 
   return webpackConfig

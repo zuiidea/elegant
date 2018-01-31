@@ -24,7 +24,7 @@ Date.prototype.format = function (format) {
   return format
 }
 
-module.exports = {
+export {
   config,
   request,
 }
