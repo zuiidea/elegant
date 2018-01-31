@@ -40,37 +40,37 @@ class Article extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch, article } = this.props
-    const { index, scrollTops } = article
-    this.menuSwiper = new Swiper(`.${styles.menuContainer}`, {
-      initialSlide: index,
-      slidesPerView: 'auto',
-      paginationClickable: false,
-      spaceBetween: 0,
-      touchRatio: 0.5,
-    })
-
-    this.contentSwiper = new Swiper(`.${styles.contentContainer}`, {
-      initialSlide: index,
-      slidesPerView: 1,
-      paginationClickable: false,
-      spaceBetween: 0,
-      touchRatio: 0.6,
-      speed: 300,
-      onSlideChangeStart: (swiper) => {
-        this.menuSwiper.update()
-        dispatch({
-          type: 'article/updateState',
-          payload: {
-            index: swiper.activeIndex,
-          },
-        })
-      },
-    })
-
-    this.contentSwiper.slides.each((i, item) => {
-      item.scrollTop = scrollTops[i] || 0
-    })
+    // const { dispatch, article } = this.props
+    // const { index, scrollTops } = article
+    // this.menuSwiper = new Swiper(`.${styles.menuContainer}`, {
+    //   initialSlide: index,
+    //   slidesPerView: 'auto',
+    //   paginationClickable: false,
+    //   spaceBetween: 0,
+    //   touchRatio: 0.5,
+    // })
+    //
+    // this.contentSwiper = new Swiper(`.${styles.contentContainer}`, {
+    //   initialSlide: index,
+    //   slidesPerView: 1,
+    //   paginationClickable: false,
+    //   spaceBetween: 0,
+    //   touchRatio: 0.6,
+    //   speed: 300,
+    //   onSlideChangeStart: (swiper) => {
+    //     this.menuSwiper.update()
+    //     dispatch({
+    //       type: 'article/updateState',
+    //       payload: {
+    //         index: swiper.activeIndex,
+    //       },
+    //     })
+    //   },
+    // })
+    //
+    // this.contentSwiper.slides.each((i, item) => {
+    //   item.scrollTop = scrollTops[i] || 0
+    // })
   }
 
   handleMenuItemClick = (index) => {
@@ -157,9 +157,12 @@ class Article extends React.Component {
 
   render() {
     const { article, loading } = this.props
-    const { index, tags } = article
-    const { handleMenuItemClick, handleArticleClick,
-      handleScorll, contentSwiper, menuSwiper } = this
+
+    const { index, categories } = article
+    const {
+      handleMenuItemClick, handleArticleClick,
+      handleScorll, contentSwiper, menuSwiper,
+    } = this
 
     const current = article[`data${index}`]
     const { list, pagination } = current
@@ -174,7 +177,9 @@ class Article extends React.Component {
     let menuOffset = 0
     let menuSwiperCenter = true
     if (menuSwiper) {
-      const { virtualSize, width, slidesGrid, slidesSizesGrid } = menuSwiper
+      const {
+        virtualSize, width, slidesGrid, slidesSizesGrid,
+      } = menuSwiper
       const totalWidth = slidesSizesGrid.reduce((a, b) => a + b, 0)
       if (totalWidth < width) {
         menuSwiper.disableTouchControl()
@@ -192,11 +197,11 @@ class Article extends React.Component {
 
     return (
       <MuiThemeProvider>
-        <div className={classnames(styles.home, { [styles.menuContainerHide]: tags.length < 2 })}>
+        <div className={classnames(styles.home, { [styles.menuContainerHide]: categories.length < 2 })}>
           <Loader
             spinning={loading.effects['article/query'] && offset === 0 && length === 0}
           />
-          <div className={classnames('swiper-container', { [styles.menuContainer]: true })}>
+          {/* <div className={classnames('swiper-container', { [styles.menuContainer]: true })}>
             <div
               className={classnames('swiper-wrapper', styles.menuWrapper, { [styles.menuWrapperCenter]: menuSwiperCenter })}
               style={{ transform: `translate3d(${-menuOffset}px, 0px, 0px)` }}
@@ -258,12 +263,11 @@ class Article extends React.Component {
                 }
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </MuiThemeProvider>
     )
   }
-
 }
 
 

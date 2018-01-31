@@ -8,7 +8,7 @@ const Index = ({ provider }) => {
   return (
     <div>
       <div className={styles.iconList} >
-        {list.map((item, index) => <Link key={index} to={`/platform/${item.name}`} className={styles.iconItem}>
+        {list.map((item, index) => <Link key={index} to={`/provider/${item.packageName}`} className={styles.iconItem}>
           <img src={item.icon} className={styles.iconImage} />
           <div className={styles.iconName}>{item.name}</div>
         </Link>)}

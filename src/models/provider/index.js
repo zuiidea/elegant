@@ -1,7 +1,7 @@
 import modelExtend from 'dva-model-extend'
+import pathToRegexp from 'path-to-regexp'
 import { model } from 'models'
 import { provider } from 'services'
-import pathToRegexp from 'path-to-regexp'
 
 export default modelExtend(model, {
   namespace: 'provider',
