@@ -138,13 +138,26 @@ export default modelExtend(model, {
       call, put,
     }) {
       const result = yield call(provider.query, { id: payload.provider })
-      const {
-        categories,
-      } = result.data
+      const { categories } = result.data
+
+      const initData = {}
+      categories.forEach((item) => {
+        initData[`data${item.categoryId}`] = {
+          list: [],
+          hasMore: false,
+          loading: false,
+          offset: 0,
+        }
+      })
+
 
       yield put({
         type: 'updateState',
-        payload: result.data,
+        payload: {
+          ...initData,
+          ...result.data,
+          index: categories[0].categoryId,
+        },
       })
 
       yield put({

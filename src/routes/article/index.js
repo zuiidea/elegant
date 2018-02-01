@@ -30,55 +30,58 @@ class Article extends React.Component {
   constructor(props) {
     super(props)
     const { article } = props
-    const { tags } = article
+    const { categories } = article
     this.lastOffset = []
     this.timeId = []
-    tags.forEach((item, index) => {
+    categories.forEach((item, index) => {
       this.lastOffset[index] = 0
       this.timeId[index] = 0
     })
   }
 
   componentDidMount() {
-    // const { dispatch, article } = this.props
-    // const { index, scrollTops } = article
-    // this.menuSwiper = new Swiper(`.${styles.menuContainer}`, {
-    //   initialSlide: index,
-    //   slidesPerView: 'auto',
-    //   paginationClickable: false,
-    //   spaceBetween: 0,
-    //   touchRatio: 0.5,
-    // })
-    //
-    // this.contentSwiper = new Swiper(`.${styles.contentContainer}`, {
-    //   initialSlide: index,
-    //   slidesPerView: 1,
-    //   paginationClickable: false,
-    //   spaceBetween: 0,
-    //   touchRatio: 0.6,
-    //   speed: 300,
-    //   onSlideChangeStart: (swiper) => {
-    //     this.menuSwiper.update()
-    //     dispatch({
-    //       type: 'article/updateState',
-    //       payload: {
-    //         index: swiper.activeIndex,
-    //       },
-    //     })
-    //   },
-    // })
-    //
-    // this.contentSwiper.slides.each((i, item) => {
-    //   item.scrollTop = scrollTops[i] || 0
-    // })
+    const { dispatch, article } = this.props
+    const { index, scrollTops } = article
+    const self = this
+    this.menuSwiper = new Swiper(`.${styles.menuContainer}`, {
+      initialSlide: index,
+      slidesPerView: 'auto',
+      spaceBetween: 0,
+      touchRatio: 0.5,
+    })
+
+    this.contentSwiper = new Swiper(`.${styles.contentContainer}`, {
+      initialSlide: index,
+      slidesPerView: 1,
+      paginationClickable: false,
+      spaceBetween: 0,
+      touchRatio: 0.6,
+      speed: 300,
+      on: {
+        slideChangeTransitionStart() {
+          self.menuSwiper.update()
+          dispatch({
+            type: 'article/updateState',
+            payload: {
+              index: self.props.article.categories[this.activeIndex].categoryId,
+            },
+          })
+        },
+      },
+    })
+
+    this.contentSwiper.slides.each((i, item) => {
+      item.scrollTop = scrollTops[i] || 0
+    })
   }
 
   handleMenuItemClick = (index) => {
     const { dispatch } = this.props
     const { menuSwiper } = this
+
     if (menuSwiper) {
       menuSwiper.update()
-      menuSwiper.wrapper.css('transition-duration', '500ms')
+      menuSwiper.$wrapperEl.css('transition-duration', '500ms')
     }
     dispatch({
       type: 'article/updateState',
@@ -89,49 +92,49 @@ class Article extends React.Component {
   }
 
   handleScorll = (e) => {
-    const { scrollHeight, scrollTop, clientHeight } = e.target
-    const { article, loading, dispatch } = this.props
-    const { index, tags, platform } = article
-    const data = article[`data${index}`]
-    const { pagination, list } = data
-    const { limit, offset, total } = pagination
-    const lastOffset = this.lastOffset[index]
-    const timeId = this.timeId[index]
-    const cases = [
-      scrollHeight - (scrollTop + clientHeight) < 1000,
-      scrollTop - lastOffset > 0,
-      limit + offset < total,
-      !loading.effects['article/query'],
-    ]
-    if (cases.every(item => item)) {
-      clearTimeout(timeId)
-      this.timeId[index] = setTimeout(() => {
-        dispatch({
-          type: 'article/updateState',
-          payload: {
-            [`data${index}`]: {
-              list,
-              pagination: {
-                offset: offset + limit,
-                limit,
-                total,
-              },
-            },
-          },
-        })
-        dispatch({
-          type: 'article/query',
-          payload: {
-            offset: offset + limit,
-            tag: tags[index],
-            platform,
-            limit,
-            index,
-          },
-        })
-      }, 300)
-    }
-    this.lastOffset[index] = scrollTop
+    // const { scrollHeight, scrollTop, clientHeight } = e.target
+    // const { article, loading, dispatch } = this.props
+    // const { index, tags, platform } = article
+    // const data = article[`data${index}`]
+    // const { pagination, list } = data
+    // const { limit, offset, total } = pagination
+    // const lastOffset = this.lastOffset[index]
+    // const timeId = this.timeId[index]
+    // const cases = [
+    //   scrollHeight - (scrollTop + clientHeight) < 1000,
+    //   scrollTop - lastOffset > 0,
+    //   limit + offset < total,
+    //   !loading.effects['article/query'],
+    // ]
+    // if (cases.every(item => item)) {
+    //   clearTimeout(timeId)
+    //   this.timeId[index] = setTimeout(() => {
+    //     dispatch({
+    //       type: 'article/updateState',
+    //       payload: {
+    //         [`data${index}`]: {
+    //           list,
+    //           pagination: {
+    //             offset: offset + limit,
+    //             limit,
+    //             total,
+    //           },
+    //         },
+    //       },
+    //     })
+    //     dispatch({
+    //       type: 'article/query',
+    //       payload: {
+    //         offset: offset + limit,
+    //         tag: tags[index],
+    //         platform,
+    //         limit,
+    //         index,
+    //       },
+    //     })
+    //   }, 300)
+    // }
+    // this.lastOffset[index] = scrollTop
   }
 
   handleArticleClick = (id) => {
@@ -156,21 +159,16 @@ class Article extends React.Component {
   }
 
   render() {
-    const { article, loading } = this.props
-
+    const { article } = this.props
     const { index, categories } = article
     const {
       handleMenuItemClick, handleArticleClick,
       handleScorll, contentSwiper, menuSwiper,
     } = this
 
-    const current = article[`data${index}`]
-    const { list, pagination } = current
-    const { total, limit, offset } = pagination
-    const length = list.length
-
     if (contentSwiper) {
-      contentSwiper.slideTo(index, 300, false)
+      contentSwiper.update()
+      contentSwiper.slideTo(categories.map(_ => _.categoryId).indexOf(index), 300, false)
     }
 
     // 调整菜单位置
@@ -198,23 +196,20 @@ class Article extends React.Component {
     return (
       <MuiThemeProvider>
         <div className={classnames(styles.home, { [styles.menuContainerHide]: categories.length < 2 })}>
-          <Loader
-            spinning={loading.effects['article/query'] && offset === 0 && length === 0}
-          />
-          {/* <div className={classnames('swiper-container', { [styles.menuContainer]: true })}>
+          <div className={classnames('swiper-container', styles.menuContainer)}>
             <div
               className={classnames('swiper-wrapper', styles.menuWrapper, { [styles.menuWrapperCenter]: menuSwiperCenter })}
               style={{ transform: `translate3d(${-menuOffset}px, 0px, 0px)` }}
             >
               {
-                tags.map((item, key) => (
+                categories.map(item => (
                   <span
-                    key={key}
-                    onClick={handleMenuItemClick.bind(null, key)}
-                    className={classnames('swiper-slide', { [styles.menuSlide]: true, [styles.menuSlideActive]: key === index })}
+                    key={item.categoryId}
+                    onClick={handleMenuItemClick.bind(null, item.categoryId)}
+                    className={classnames('swiper-slide', styles.menuSlide, { [styles.menuSlideActive]: item.categoryId === index })}
                   >
                     <RaisedButton
-                      label={item}
+                      label={item.name}
                       style={RaisedButtonStyle}
                       labelStyle={labelStyle}
                       overlayStyle={overlayStyle}
@@ -225,45 +220,48 @@ class Article extends React.Component {
             </div>
           </div>
           <div className={styles.content}>
-            <div className={classnames('swiper-container', { [styles.contentContainer]: true })} >
+            <div className={classnames('swiper-container', styles.contentContainer)} >
               <div className="swiper-wrapper">
                 {
-                  Array.from({ length: tags.length }).map((item, key) => (
-                    <div key={key} className={classnames({ 'swiper-slide': true, [styles.contentSlide]: true })} onScroll={handleScorll}>
-                      {
-                        length
-                        ? list.map((iitem, iindex) => <ListItem
-                          onClick={handleArticleClick.bind(null, iitem.id)}
-                          key={iindex}
-                          data={iitem}
-                        />)
-                        : <div className={styles.noContent}>
-                          暂无数据
-                        </div>
-                      }
-                      {
-                        length
-                        ? <div className={styles.listFooter}>
-                          {
-                              (length + limit < total && length > 9)
-                              ? <div className={styles.listFooterLoading}>
-                                <CircularProgress color="#000" size={20} thickness={2} />
-                                <div className={styles.listFooterText}>加载中...</div>
-                              </div>
-                              : <div className={styles.listFooterLoaded}>
-                                已加载到底部
-                              </div>
-                            }
-                        </div>
-                        : ''
-                      }
+                  categories.map((item) => {
+                    const articleItem = article[`data${item.categoryId}`]
 
-                    </div>
-                  ))
+                    return (
+                      <div key={item.categoryId} className={classnames('swiper-slide', styles.contentSlide)} onScroll={handleScorll}>
+                        {
+                          (articleItem && articleItem.list.length)
+                          ? articleItem.list.map((iitem, iindex) => <ListItem
+                            onClick={handleArticleClick.bind(null, iitem.id)}
+                            key={iindex}
+                            data={iitem}
+                          />)
+                          : <div className={styles.noContent}>
+                            暂无数据
+                          </div>
+                        }
+                        {
+                          articleItem.list.length > 9
+                          ? <div className={styles.listFooter}>
+                            {
+                                articleItem.hasMore
+                                ? <div className={styles.listFooterLoading}>
+                                  <CircularProgress color="#000" size={20} thickness={2} />
+                                  <div className={styles.listFooterText}>加载中...</div>
+                                </div>
+                                : <div className={styles.listFooterLoaded}>
+                                  已加载到底部
+                                </div>
+                              }
+                          </div>
+                          : ''
+                        }
+                      </div>
+                    )
+                  })
                 }
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </MuiThemeProvider>
     )
