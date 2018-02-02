@@ -60,12 +60,14 @@ export default modelExtend(model, {
         .map(_ => categoryIds[_])
 
 
-      yield put({
-        type: 'queryArticle',
-        payload,
-      })
+      if (!state[`data${payload.categoryId}`].list.length) {
+        yield put({
+          type: 'queryArticle',
+          payload,
+        })
 
-      yield take('queryArticle/@@end')
+        yield take('queryArticle/@@end')
+      }
 
       if (extraCategoryIds.length) {
         for (let i = 0; i < extraCategoryIds.length; i += 1) {
@@ -125,7 +127,6 @@ export default modelExtend(model, {
           offset: 0,
         }
       })
-
 
       yield put({
         type: 'updateState',

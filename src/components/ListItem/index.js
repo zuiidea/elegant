@@ -1,16 +1,26 @@
 import React from 'react'
 import styles from './index.less'
+import VideoPlayer from '../VideoPlayer'
+
+console.log(styles)
 
 const ListItem = ({ data, ...other }) => {
-  const { title, summary, banner, createTime } = data
+  const {
+    title, createTime, covers, snippet, date, templateType, videos,
+  } = data
+
+  const content = []
+  if (templateType === 'video') {
+    content.push(<VideoPlayer videoUrl={videos[0].url} coverUrl={videos[0].coverUrl} />)
+  }
+
   return (
     <section className={styles.item} {...other}>
-      <div className={styles.main}>
-        {banner && <img className={styles.banner} src={banner} />}
-        <div className={styles.maintext}>
-          <h3 className={styles.title}>{title}</h3>
-          <summary className={styles.summary}>{summary}</summary>
-        </div>
+      {content}
+      <div className={styles.inner} >
+        <div className={styles.title}>{title}</div>
+        <div className={styles.snippet}>{snippet}</div>
+        <div className={styles.dateTime}>{date}</div>
       </div>
       <div className={styles.date}>{createTime}</div>
     </section>

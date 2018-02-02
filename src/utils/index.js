@@ -54,7 +54,7 @@ const formatTime = (timestamp, relativeTimestamp = true) => {
     return `${h}:${m}`
   }
 
-  if (year == currentDate.getFullYear()) {
+  if (year === currentDate.getFullYear()) {
     return `${month}月${day}日`
   }
 
@@ -62,8 +62,23 @@ const formatTime = (timestamp, relativeTimestamp = true) => {
 }
 
 
+function debounce(fn, delay) {
+  let timer
+  return function () {
+    const context = this
+    /*eslint-disable*/
+
+    const args = arguments
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(context, args)
+    }, delay)
+  }
+}
+
 export {
   config,
   request,
   formatTime,
+  debounce,
 }

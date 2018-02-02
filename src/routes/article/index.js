@@ -31,16 +31,14 @@ class Article extends React.Component {
     super(props)
     const { article } = props
     const { categories } = article
-    this.lastOffset = []
-    this.timeId = []
+    this.lastOffset = {}
     categories.forEach((item, index) => {
       this.lastOffset[index] = 0
-      this.timeId[index] = 0
     })
   }
 
   componentDidMount() {
-    const { dispatch, article } = this.props
+    const { article } = this.props
     const { index, scrollTops } = article
     const self = this
     this.menuSwiper = new Swiper(`.${styles.menuContainer}`, {
@@ -60,12 +58,7 @@ class Article extends React.Component {
       on: {
         slideChangeTransitionStart() {
           self.menuSwiper.update()
-          dispatch({
-            type: 'article/updateState',
-            payload: {
-              index: self.props.article.categories[this.activeIndex].categoryId,
-            },
-          })
+          self.handleIndexChange(self.props.article.categories[this.activeIndex].categoryId)
         },
       },
     })
@@ -76,66 +69,75 @@ class Article extends React.Component {
   }
 
   handleMenuItemClick = (index) => {
-    const { dispatch } = this.props
     const { menuSwiper } = this
-
     if (menuSwiper) {
       menuSwiper.update()
       menuSwiper.$wrapperEl.css('transition-duration', '500ms')
     }
+    this.handleIndexChange(index)
+  }
+
+  handleIndexChange = (index) => {
+    const { dispatch } = this.props
+
     dispatch({
       type: 'article/updateState',
       payload: {
         index,
       },
     })
+
+    dispatch({
+      type: 'article/preQuery',
+      payload: {
+        categoryId: index,
+      },
+    })
   }
 
   handleScorll = (e) => {
-    console.log('handleScorll')
     const { scrollHeight, scrollTop, clientHeight } = e.target
-    const { article, loading, dispatch } = this.props
+    const { article, dispatch } = this.props
     const { index } = article
     const data = article[`data${index}`]
-    // const { pagination, list } = data
-    // const { limit, offset, total } = pagination
-    // const lastOffset = this.lastOffset[index]
-    // const timeId = this.timeId[index]
-    // const cases = [
-    //   scrollHeight - (scrollTop + clientHeight) < 1000,
-    //   scrollTop - lastOffset > 0,
-    //   limit + offset < total,
-    //   !loading.effects['article/query'],
-    // ]
-    // if (cases.every(item => item)) {
-    //   clearTimeout(timeId)
-    //   this.timeId[index] = setTimeout(() => {
-    //     dispatch({
-    //       type: 'article/updateState',
-    //       payload: {
-    //         [`data${index}`]: {
-    //           list,
-    //           pagination: {
-    //             offset: offset + limit,
-    //             limit,
-    //             total,
-    //           },
-    //         },
-    //       },
-    //     })
-    //     dispatch({
-    //       type: 'article/query',
-    //       payload: {
-    //         offset: offset + limit,
-    //         tag: tags[index],
-    //         platform,
-    //         limit,
-    //         index,
-    //       },
-    //     })
-    //   }, 300)
-    // }
-    // this.lastOffset[index] = scrollTop
+    const { hasMore, offset } = data
+    const lastOffset = this.lastOffset[index]
+    const cases = [
+      scrollHeight - (scrollTop + clientHeight) < 1000,
+      scrollTop - lastOffset > 0,
+      hasMore,
+      !data.loading,
+    ]
+
+    this.lastOffset[index] = scrollTop
+    dispatch({
+      type: 'article/updateState',
+      payload: {
+        scrollDirection: scrollTop - lastOffset > 0 ? 'down' : 'up',
+      },
+    })
+
+    if (!cases.every(item => item)) {
+      return
+    }
+
+    dispatch({
+      type: 'article/updateState',
+      payload: {
+        [`data${index}`]: {
+          ...data,
+          loading: true,
+        },
+      },
+    }).then(() => {
+      dispatch({
+        type: 'article/queryArticle',
+        payload: {
+          categoryId: index,
+          offset: offset + 10,
+        },
+      })
+    })
   }
 
   handleArticleClick = (id) => {
@@ -148,15 +150,15 @@ class Article extends React.Component {
         scrollTops[index] = item.scrollTop
       })
     }
-    dispatch({
-      type: 'article/updateState',
-      payload: {
-        scrollTops,
-      },
-    })
-    dispatch(routerRedux.push({
-      pathname: `/platform/${platform}/article/${id}`,
-    }))
+    // dispatch({
+    //   type: 'article/updateState',
+    //   payload: {
+    //     scrollTops,
+    //   },
+    // })
+    // dispatch(routerRedux.push({
+    //   pathname: `/platform/${platform}/article/${id}`,
+    // }))
   }
 
   render() {
@@ -228,7 +230,11 @@ class Article extends React.Component {
                     const articleItem = article[`data${item.categoryId}`]
 
                     return (
-                      <div key={item.categoryId} className={classnames('swiper-slide', styles.contentSlide)} onScroll={handleScorll}>
+                      <div
+                        key={item.categoryId}
+                        className={classnames('swiper-slide', styles.contentSlide)}
+                        onScroll={handleScorll}
+                      >
                         {
                           (articleItem && articleItem.list.length)
                           ? articleItem.list.map((iitem, iindex) => <ListItem
