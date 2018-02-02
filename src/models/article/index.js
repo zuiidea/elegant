@@ -33,87 +33,61 @@ export default modelExtend(model, {
         const match = pathToRegexp('/provider/:provider').exec(pathname)
         if (match) {
           dispatch({
-            type: 'query',
+            type: 'updateState',
             payload: {
               provider: match[1],
             },
+          }).then(() => {
+            dispatch({ type: 'query' })
           })
-
-          // const platform = match[1]
-          // const tags = EnumPlatform[platform].tags
-          // const tag = query.tag || tags[0]
-          // const initData = {}
-          // tags.forEach((item, index) => {
-          //   initData[`data${index}`] = {
-          //     list: [],
-          //     pagination: {
-          //       limit: 10,
-          //       offset: 0,
-          //       total: 0,
-          //     },
-          //   }
-          // })
-
-          // dispatch({
-          //   type: 'updateState',
-          //   payload: {
-          //     tags,
-          //     platform,
-          //     ...initData,
-          //   },
-          // })
-
-          // dispatch({
-          //   type: 'preQuery',
-          //   payload: {
-          //     tag,
-          //     tags,
-          //     platform,
-          //     index: EnumPlatform[platform].tags.indexOf(tag),
-          //   },
-          // })
         }
       })
     },
   },
 
   effects: {
-    // *preQuery({
-    //   payload = {},
-    // }, { put, select }) {
-    //   const { tags, tag, index } = payload
-    //   const state = yield select(item => item.article)
-    //   if (state[`data${index}`].list.length) {
-    //     return
-    //   }
-    //
-    //   yield put({
-    //     type: 'query',
-    //     payload,
-    //   })
-    //
-    //   for (let i = 0; i < tags.length; i += 1) {
-    //     if (tags[i] !== tag) {
-    //       yield put({
-    //         type: 'query',
-    //         payload: {
-    //           ...payload,
-    //           tag: tags[i],
-    //           index: i,
-    //         },
-    //       })
-    //     }
-    //   }
-    // },
+
+    *preQuery({
+      payload = {},
+    }, { put, select, take }) {
+      const state = yield select(item => item.article)
+      const { categories } = state
+      const categoryIds = categories.map(_ => _.categoryId)
+      const currentIndex = categoryIds.indexOf(payload.categoryId)
+
+      const extraCategoryIds = [currentIndex + 1, currentIndex - 1]
+        .filter(_ => _ >= 0 && _ < categories.length)
+        .map(_ => categoryIds[_])
+
+
+      yield put({
+        type: 'queryArticle',
+        payload,
+      })
+
+      yield take('queryArticle/@@end')
+
+      if (extraCategoryIds.length) {
+        for (let i = 0; i < extraCategoryIds.length; i += 1) {
+          if (!state[`data${extraCategoryIds[i]}`].list.length) {
+            yield put({
+              type: 'queryArticle',
+              payload: {
+                categoryId: extraCategoryIds[i],
+              },
+            })
+          }
+        }
+      }
+    },
 
     *queryArticle({
       payload = {},
     }, { call, put, select }) {
-      const { offset = 0 } = payload
-      const result = yield call(article.list, payload)
-
-
       const state = yield select(item => item.article)
+      const { offset = 0 } = payload
+      const result = yield call(article.list, { ...payload, provider: state.provider })
+
       const { list = [] } = state[`data${payload.categoryId}`] || {}
 
       yield put({
@@ -133,11 +107,13 @@ export default modelExtend(model, {
     },
 
     *query({
+      /*eslint-disable */
       payload = {},
     }, {
-      call, put,
+      call, put, select, take,
     }) {
-      const result = yield call(provider.query, { id: payload.provider })
+      const state = yield select(item => item.article)
+      const result = yield call(provider.query, { id: state.provider })
       const { categories } = result.data
 
       const initData = {}
@@ -160,46 +136,14 @@ export default modelExtend(model, {
         },
       })
 
+      yield take('updateState/@@end')
+
       yield put({
-        type: 'queryArticle',
+        type: 'preQuery',
         payload: {
-          provider: payload.provider,
           categoryId: categories[0].categoryId,
         },
       })
-
-
-      // const { tag, index, platform } = payload
-      // const { limit = 10, offset = 0 } = payload
-      // const result = yield call(query, {
-      //   tag, limit, offset, platform,
-      // })
-      // const { success, data } = result
-      //
-      // if (success) {
-      //   const state = yield select(item => item.article)
-      //   const { list } = state[`data${index}`]
-      //   const { total } = data
-      //   const newData = (offset === 0 ? [] : list)
-      //     .concat(data.list)
-      //
-      //   yield put({
-      //     type: 'updateState',
-      //     payload: {
-      //       [`data${index}`]: {
-      //         list: newData,
-      //         pagination: {
-      //           total,
-      //           limit,
-      //           offset,
-      //         },
-      //       },
-      //     },
-      //   })
-      // } else {
-      //   result.type = 'queryArticles'
-      //   throw result
-      // }
     },
   },
 

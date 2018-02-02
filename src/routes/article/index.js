@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { Loader, ListItem } from 'components'
+import { ListItem } from 'components'
 import { connect } from 'dva'
 import { routerRedux } from 'dva/router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -92,10 +92,11 @@ class Article extends React.Component {
   }
 
   handleScorll = (e) => {
-    // const { scrollHeight, scrollTop, clientHeight } = e.target
-    // const { article, loading, dispatch } = this.props
-    // const { index, tags, platform } = article
-    // const data = article[`data${index}`]
+    console.log('handleScorll')
+    const { scrollHeight, scrollTop, clientHeight } = e.target
+    const { article, loading, dispatch } = this.props
+    const { index } = article
+    const data = article[`data${index}`]
     // const { pagination, list } = data
     // const { limit, offset, total } = pagination
     // const lastOffset = this.lastOffset[index]

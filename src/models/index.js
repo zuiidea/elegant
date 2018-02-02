@@ -1,8 +1,19 @@
 import modelExtend from 'dva-model-extend'
 
 const model = {
+  effects: {
+    *updateState({
+      payload = {},
+    }, { put }) {
+      yield put({
+        type: 'updateStateReducer',
+        payload,
+      })
+    },
+  },
+
   reducers: {
-    updateState(state, { payload }) {
+    updateStateReducer(state, { payload }) {
       return {
         ...state,
         ...payload,
