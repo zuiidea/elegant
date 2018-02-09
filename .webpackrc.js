@@ -9,7 +9,7 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'http://journal.zuiidea.com/api/v1',
+      target: 'http://elegant-api.zuiidea.com/api/v1',
       changeOrigin: true,
       pathRewrite: {
         '^/api': '/'

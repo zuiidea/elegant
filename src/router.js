@@ -23,25 +23,31 @@ const Routers = function ({ history, app }) {
     },
   ]
 
+  console.log(routes)
+
   return (
     <ConnectedRouter history={history}>
-      <App>
-        <Switch>
-          {
-            routes.map(({ path, ...dynamics }, key) => (
-              <Route
-                key={key}
-                exact
-                path={path}
-                component={dynamic({
-                  app,
-                  ...dynamics,
-                })}
-              />
-            ))
+      <Switch>
+        {
+            routes.map(({ path, ...dynamics }, key) => {
+              console.log(key, path, dynamics, dynamic({
+                app,
+                ...dynamics,
+              }))
+              return (
+                <Route
+                  key={key}
+                  exact
+                  path={path}
+                  component={dynamic({
+                    app,
+                    ...dynamics,
+                  })}
+                />
+              )
+            })
           }
-        </Switch>
-      </App>
+      </Switch>
     </ConnectedRouter>
   )
 }

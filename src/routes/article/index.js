@@ -162,8 +162,9 @@ class Article extends React.Component {
   }
 
   render() {
+    console.log('render')
     const { article } = this.props
-    const { index, categories } = article
+    const { index, categories, scrollDirection } = article
     const {
       handleMenuItemClick, handleArticleClick,
       handleScorll, contentSwiper, menuSwiper,
@@ -199,7 +200,10 @@ class Article extends React.Component {
     return (
       <MuiThemeProvider>
         <div className={classnames(styles.home, { [styles.menuContainerHide]: categories.length < 2 })}>
-          <div className={classnames('swiper-container', styles.menuContainer)}>
+          <div
+            className={classnames('swiper-container', styles.menuContainer)}
+            style={{ transform: `translate3d(0px, ${scrollDirection === 'down' && this.lastOffset[index] > 50 ? '-50' : 0}px, 0px)` }}
+          >
             <div
               className={classnames('swiper-wrapper', styles.menuWrapper, { [styles.menuWrapperCenter]: menuSwiperCenter })}
               style={{ transform: `translate3d(${-menuOffset}px, 0px, 0px)` }}
@@ -237,9 +241,9 @@ class Article extends React.Component {
                       >
                         {
                           (articleItem && articleItem.list.length)
-                          ? articleItem.list.map((iitem, iindex) => <ListItem
-                            onClick={handleArticleClick.bind(null, iitem.id)}
-                            key={iindex}
+                          ? articleItem.list.map(iitem => <ListItem
+                            onClick={handleArticleClick.bind(null, iitem.articleId)}
+                            key={iitem.articleId}
                             data={iitem}
                           />)
                           : <div className={styles.noContent}>

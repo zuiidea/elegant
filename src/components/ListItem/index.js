@@ -2,8 +2,6 @@ import React from 'react'
 import styles from './index.less'
 import VideoPlayer from '../VideoPlayer'
 
-console.log(styles)
-
 const ListItem = ({ data, ...other }) => {
   const {
     title, createTime, covers, snippet, date, templateType, videos,
@@ -11,7 +9,7 @@ const ListItem = ({ data, ...other }) => {
 
   const content = []
   if (templateType === 'video') {
-    content.push(<VideoPlayer videoUrl={videos[0].url} coverUrl={videos[0].coverUrl} />)
+    content.push(<VideoPlayer key="video" videoUrl={videos[0].url} coverUrl={videos[0].coverUrl} />)
   }
 
   return (
